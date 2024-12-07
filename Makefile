@@ -14,6 +14,7 @@ install:
 	docker compose exec app sh -c "cd src && php artisan key:generate"
 	docker compose exec app sh -c "cd src && php artisan storage:link"
 	docker compose exec app sh -c "cd src && chmod -R 777 storage bootstrap/cache"
+	docker compose exec app sh -c "cd src && npm install"
 	@make fresh
 # create-project:
 # 	mkdir src
