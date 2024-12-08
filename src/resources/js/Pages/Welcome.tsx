@@ -1,26 +1,57 @@
+import Sidebar from '@/Components/Sidebar';
+import BaseLayout from '@/Layouts/BaseLayout';
 import { PageProps } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 
-export default function Welcome({
-    auth,
-    laravelVersion,
-    phpVersion,
-}: PageProps<{ laravelVersion: string; phpVersion: string }>) {
-    const handleImageError = () => {
-        document
-            .getElementById('screenshot-container')
-            ?.classList.add('!hidden');
-        document.getElementById('docs-card')?.classList.add('!row-span-1');
-        document
-            .getElementById('docs-card-content')
-            ?.classList.add('!flex-row');
-        document.getElementById('background')?.classList.add('!hidden');
-    };
-
+export default function Welcome() {
     return (
         <>
-            <Head title='Welcome' />
-            <div className='bg-gray-50 text-black/50 dark:bg-black dark:text-white/50'>
+            <Head title='RankTube - YouTube再生回数・トレンドランキング' />
+            <BaseLayout>
+                <div className='mt-16 mx-14'>
+                    <div className='relative mb-10'>
+                        <p className='text-2xl'>デイリー再生回数ランキング</p>
+                        <div className='absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-red-500 via-yellow-500 to-yellow-100'></div>
+                    </div>
+                    <div className='my-5'>
+                        <p>エンターテインメント</p>
+
+                    </div>
+                    <div className='my-5'>
+                        <p>音楽</p>
+
+                    </div>
+                    <div className='my-5'>
+                        <p>ゲーム</p>
+
+                    </div>
+                    <div className='my-5'>
+                        <p>スポーツ</p>
+
+                    </div>
+                    <div className='my-5'>
+                        <p>美容＆ファッション</p>
+
+                    </div>
+                    <div className='my-5'>
+                        <p>Vlog</p>
+
+                    </div>
+                    <div className='my-5'>
+                        <p>料理</p>
+
+                    </div>
+                    <div className='my-5'>
+                        <p>アニメ</p>
+
+                    </div>
+                    <div className='my-5'>
+                        <p>ニュース</p>
+
+                    </div>
+                </div>
+            </BaseLayout>
+            {/* <div className='bg-gray-50 text-black/50 dark:bg-black dark:text-white/50'>
                 <img
                     id='background'
                     className='absolute -left-20 top-0 max-w-[877px]'
@@ -360,7 +391,7 @@ export default function Welcome({
                         </footer>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </>
     );
 }
