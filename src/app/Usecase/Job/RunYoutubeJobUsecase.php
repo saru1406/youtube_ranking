@@ -5,18 +5,24 @@ declare(strict_types=1);
 namespace App\Usecase\Job;
 
 use App\Repositories\DlYoutube\DlYoutubeRepositoryInterface;
+use App\Repositories\DwhYoutube\DwhYoutubeRepositoryInterface;
 use App\Repositories\Youtube\YoutubeRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
 {
     private ?string $pageToken;
 
+    private array $allVideos;
+
     public function __construct(
         private readonly YoutubeRepositoryInterface $youtubeRepository,
         private readonly DlYoutubeRepositoryInterface $dlYoutubeRepository,
+        private readonly DwhYoutubeRepositoryInterface $dwhYoutubeRepository,
     ) {
         $this->pageToken = null;
+        $this->allVideos = [];
     }
 
     /**
@@ -25,7 +31,10 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
     public function execute(): void
     {
         $this->storeDlYoutubeData();
-        // $this->storeDwhYoutubeData();
+        Log::info('DL保存完了');
+
+        $this->storeDwhYoutubeData();
+        Log::info('DWH保存完了');
     }
 
     /**
@@ -36,14 +45,15 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
     private function storeDlYoutubeData(): void
     {
         $categories = [1, 10, 17, 20, 26, 22, 25];
+
         foreach ($categories as $category) {
             $categoryVideos = [];
             do {
                 $categoryVideos = $this->fetchYoutubeData($category);
-                Log::info($this->pageToken);
 
-                if (!$this->pageToken) {
+                if (! $this->pageToken) {
                     $this->storeYoutubeData($categoryVideos);
+                    $this->allVideos = array_merge($this->allVideos, $categoryVideos);
                 }
             } while ($this->pageToken);
         }
@@ -61,11 +71,13 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
     {
         $response = $this->youtubeRepository->fetchYoutubeData($category, $this->pageToken);
         $this->pageToken = $response['nextPageToken'] ?? null;
+
         return $response['items'];
     }
 
     /**
-     * 整形後、データを保存
+     * 整形後、データをDLに保存
+     *
      * @param array $categoryVideos
      * @return void
      */
@@ -92,8 +104,37 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
         }, $categoryVideos);
     }
 
-    // private function storeDwhYoutubeData(): void
-    // {
-    //     $this->dlYoutubeRepository->fetch
-    // }
+    /**
+     * 整形後、データをDWHに保存
+     *
+     * @return void
+     */
+    private function storeDwhYoutubeData(): void
+    {
+        $formatDwhYoutubeData = $this->formatDwhYoutubeData();
+        $this->dwhYoutubeRepository->bulkInsert($formatDwhYoutubeData);
+    }
+
+    /**
+     * 取得したデータをDWH用に整形
+     *
+     * @return array
+     */
+    private function formatDwhYoutubeData(): array
+    {
+        return array_map(function ($allVideo) {
+            return [
+                'video_id' => $allVideo['id'],
+                'title' => $allVideo['snippet']['title'],
+                'description' => $allVideo['snippet']['description'] ?? null,
+                'channel_id' => $allVideo['snippet']['channelId'],
+                'channel_name' => $allVideo['snippet']['channelTitle'],
+                'view_count' => $allVideo['statistics']['viewCount'] ?? 0,
+                'like_count' => $allVideo['statistics']['likeCount'] ?? 0,
+                'comment_count' => $allVideo['statistics']['commentCount'] ?? 0,
+                'url' => "https://www.youtube.com/embed/{$allVideo['id']}",
+                'published_at' => Carbon::parse($allVideo['snippet']['publishedAt'] ?? null)->format('Y-m-d H:i:s'),
+            ];
+        }, $this->allVideos);
+    }
 }

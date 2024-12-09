@@ -7,10 +7,10 @@ namespace App\Repositories\DlYoutube;
 interface DlYoutubeRepositoryInterface
 {
     /**
-     * カテゴリごとに取得したデータを一括保存
+     * DlYoutubeにデータを一括保存
      *
-     * @param array $categoryVideosData
+     * @param array $data
      * @return void
      */
-    public function bulkInsert(array $categoryVideosData): void;
+    public function bulkInsert(array $data): void;
 }

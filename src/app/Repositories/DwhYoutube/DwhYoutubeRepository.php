@@ -4,4 +4,15 @@ declare(strict_types=1);
 
 namespace App\Repositories\DwhYoutube;
 
-class DwhYoutubeRepository implements DwhYoutubeRepositoryInterface {}
+use App\Models\DwhYoutubeVideo;
+
+class DwhYoutubeRepository implements DwhYoutubeRepositoryInterface
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function bulkInsert(array $data): void
+    {
+        DwhYoutubeVideo::insert($data);
+    }
+}

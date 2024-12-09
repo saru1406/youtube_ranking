@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Usecase\Job\RunYoutubeJobUsecaseInterface;
@@ -8,7 +10,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class YoutubeJob implements ShouldQueue
 {
@@ -19,9 +20,7 @@ class YoutubeJob implements ShouldQueue
      */
     public function __construct(
         private readonly RunYoutubeJobUsecaseInterface $runYoutubeJobUsecase
-    ) {
-
-    }
+    ) {}
 
     /**
      * Execute the job.

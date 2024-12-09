@@ -34,7 +34,7 @@ Route::get('/redis-test', function () {
     $value = Redis::get('test_key');
 
     // 結果を返す
-    return "Stored value in Redis: " . $value;
+    return 'Stored value in Redis: '.$value;
 });
 
 require __DIR__.'/auth.php';

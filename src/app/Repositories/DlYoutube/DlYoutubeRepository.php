@@ -11,8 +11,8 @@ class DlYoutubeRepository implements DlYoutubeRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function bulkInsert(array $categoryVideosData): void
+    public function bulkInsert(array $data): void
     {
-        DlYoutubeVideo::insert($categoryVideosData);
+        DlYoutubeVideo::insert($data);
     }
 }

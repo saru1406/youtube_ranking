@@ -14,6 +14,7 @@ class YoutubeRepository implements YoutubeRepositoryInterface
      */
     public function fetchYoutubeData(int $categoryId, ?string $pageToken = null): array
     {
+        Log::info('Youtube API 取得開始', ['categoryId' => $categoryId, 'pageToken' => $pageToken]);
         $query = [
             'part' => 'snippet,statistics',
             'chart' => 'mostPopular',
@@ -29,7 +30,7 @@ class YoutubeRepository implements YoutubeRepositoryInterface
         $response = Http::get('https://www.googleapis.com/youtube/v3/videos', $query);
 
         if ($response->successful()) {
-            // Log::info($response->json());
+            Log::info('Youtube API 取得完了', ['categoryId' => $categoryId, 'pageToken' => $pageToken]);
 
             return $response->json();
         }
