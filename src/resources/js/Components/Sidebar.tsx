@@ -2,7 +2,7 @@ import { Link } from '@inertiajs/react';
 
 export default function Sidebar() {
     return (
-        <div className='max-w-64 min-w-60 bg-gradient-to-b from-rose-900 via-red-700 to-pink-500 text-white sticky top-0 h-screen'>
+        <div className='max-w-64 min-w-64 bg-gradient-to-b from-rose-900 via-red-700 to-pink-500 text-white sticky top-0 h-screen'>
         {/* <div className='max-w-56 min-w-52 bg-gradient-to-b from-rose-800 via-rose-600 to-rose-100 text-white sticky top-0 h-screen'></div> */}
             <div className='flex flex-col h-full justify-end'>
                 <div>

@@ -10,7 +10,7 @@ export default function Welcome() {
             <BaseLayout>
                 <div className='mt-16 mx-14'>
                     <div className='relative mb-10'>
-                        <p className='text-2xl'>デイリー再生回数ランキング</p>
+                        <h2 className='text-2xl'>デイリー総合トレンド</h2>
                         <div className='absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-red-500 via-yellow-500 to-yellow-100'></div>
                     </div>
                     <div className='my-5'>
