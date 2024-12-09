@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Jobs\YoutubeJob;
 use App\Usecase\Job\RunYoutubeJobUsecaseInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -36,7 +37,7 @@ class JobCommand extends Command
     public function handle(): void
     {
         Log::info('実行開始');
-        $this->runYoutubeJobUsecase->execute();
+        YoutubeJob::dispatch($this->runYoutubeJobUsecase);
         Log::info('実行完了');
     }
 }

@@ -24,7 +24,8 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
      */
     public function execute(): void
     {
-        $this->youtubeData();
+        $this->storeDlYoutubeData();
+        // $this->storeDwhYoutubeData();
     }
 
     /**
@@ -32,7 +33,7 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
      *
      * @return void
      */
-    private function youtubeData()
+    private function storeDlYoutubeData(): void
     {
         $categories = [1, 10, 17, 20, 26, 22, 25];
         foreach ($categories as $category) {
@@ -53,7 +54,7 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
      *
      * @param int $category
      * @param array $categoryVideos
-     * @param mixed $pageToken
+     * @param ?string $pageToken
      * @return array
      */
     private function fetchYoutubeData(int $category): array
@@ -65,12 +66,12 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
 
     /**
      * 整形後、データを保存
-     * @param mixed $categoryVideos
+     * @param array $categoryVideos
      * @return void
      */
-    private function storeYoutubeData($categoryVideos)
+    private function storeYoutubeData(array $categoryVideos)
     {
-        $categoryVideosData = $this->formatYoutubeData($categoryVideos);
+        $categoryVideosData = $this->formatYoutubeData(categoryVideos: $categoryVideos);
         $this->dlYoutubeRepository->bulkInsert($categoryVideosData);
     }
 
@@ -90,4 +91,9 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
             ];
         }, $categoryVideos);
     }
+
+    // private function storeDwhYoutubeData(): void
+    // {
+    //     $this->dlYoutubeRepository->fetch
+    // }
 }
