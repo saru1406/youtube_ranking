@@ -92,8 +92,10 @@ ide-helper:
 	docker compose exec app sh -c "cd src && php artisan ide-helper:meta"
 	docker compose exec app sh -c "cd src && php artisan ide-helper:models --nowrite"
 format:
-	docker compose exec app sh -c "cd src && ./vendor/bin/pint --verbose"
+	docker compose exec app sh -c "cd src && ./vendor/bin/pint"
 format-test:
-	docker compose exec app sh -c "cd src && ./vendor/bin/pint --verbose --test"
+	docker compose exec app sh -c "cd src && ./vendor/bin/pint --test"
 front-format:
 	docker compose exec app sh -c "cd src && npm run format"
+job:
+	docker compose exec app sh -c "cd src && php artisan app:job-run"
