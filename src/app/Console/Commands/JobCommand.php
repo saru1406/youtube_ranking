@@ -6,7 +6,9 @@ namespace App\Console\Commands;
 
 use App\Jobs\YoutubeJob;
 use App\Usecase\Job\RunYoutubeJobUsecaseInterface;
+use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class JobCommand extends Command
@@ -36,8 +38,18 @@ class JobCommand extends Command
      */
     public function handle(): void
     {
-        Log::info('実行開始');
-        YoutubeJob::dispatch($this->runYoutubeJobUsecase);
-        Log::info('実行完了');
+        try {
+            Log::info('実行開始');
+
+            DB::transaction(function () {
+                YoutubeJob::dispatch($this->runYoutubeJobUsecase);
+            });
+
+            Log::info('実行完了');
+        } catch (Exception $e) {
+            Log::error(
+                'error:'.$e->getMessage()
+            );
+        }
     }
 }

@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('dl_youtube_videos', function (Blueprint $table) {
             $table->id()->comment('ID');
+            $table->unsignedTinyInteger('search_category_id')->comment('検索カテゴリID');
+            $table->foreign('search_category_id')->references('category_number')->on('categories')->onUpdate('cascade');
             $table->json('video_data')->comment('動画情報');
             $table->timestamps();
         });

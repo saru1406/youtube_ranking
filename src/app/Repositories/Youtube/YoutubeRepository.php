@@ -15,17 +15,24 @@ class YoutubeRepository implements YoutubeRepositoryInterface
     public function fetchYoutubeData(int $categoryId, ?string $pageToken = null): array
     {
         Log::info('Youtube API 取得開始', ['categoryId' => $categoryId, 'pageToken' => $pageToken]);
+
         $query = [
-            'part' => 'snippet,statistics',
+            'part' => 'snippet,statistics,contentDetails',
             'chart' => 'mostPopular',
             'regionCode' => 'JP',
-            'videoCategoryId' => $categoryId,
             'maxResults' => 50,
             'key' => config('apiKey.google_api_key'),
         ];
+
+        if ($categoryId !== 0) {
+            $query['videoCategoryId'] = $categoryId;
+        }
+
         if ($pageToken) {
             $query['pageToken'] = $pageToken;
         }
+
+        Log::info('query', $query);
 
         $response = Http::get('https://www.googleapis.com/youtube/v3/videos', $query);
 

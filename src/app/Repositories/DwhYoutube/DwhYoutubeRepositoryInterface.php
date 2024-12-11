@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repositories\DwhYoutube;
 
+use Illuminate\Support\Collection;
+
 interface DwhYoutubeRepositoryInterface
 {
     /**
@@ -13,4 +15,13 @@ interface DwhYoutubeRepositoryInterface
      * @return void
      */
     public function bulkInsert(array $data): void;
+
+    /**
+     * DwhYoutubeから直近1時間の動画を取得
+     *
+     * @param int $categoryId
+     * @param ?int $limit
+     * @return Collection
+     */
+    public function fetchVideosByLastHourByCategory(int $categoryId, ?int $limit = null): Collection;
 }

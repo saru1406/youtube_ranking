@@ -12,6 +12,7 @@ class DwhYoutubeVideo extends Model
     use HasFactory;
 
     protected $fillable = [
+        'search_category_id',
         'video_id',
         'title',
         'description',
@@ -20,7 +21,9 @@ class DwhYoutubeVideo extends Model
         'view_count',
         'like_count',
         'comment_count',
+        'category_id',
         'url',
+        'duration',
         'published_at',
     ];
 }

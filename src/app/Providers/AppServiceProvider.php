@@ -12,6 +12,8 @@ use App\Repositories\Youtube\YoutubeRepository;
 use App\Repositories\Youtube\YoutubeRepositoryInterface;
 use App\Usecase\Job\RunYoutubeJobUsecase;
 use App\Usecase\Job\RunYoutubeJobUsecaseInterface;
+use App\Usecase\Youtube\DailyTrendYoutubeUsecase;
+use App\Usecase\Youtube\DailyTrendYoutubeUsecaseInterface;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,14 +27,17 @@ class AppServiceProvider extends ServiceProvider
         // YoutubeJob
         $this->app->bind(RunYoutubeJobUsecaseInterface::class, RunYoutubeJobUsecase::class);
 
-        // DLYoutube
+        // DLYoutubeRepository
         $this->app->bind(DlYoutubeRepositoryInterface::class, DlYoutubeRepository::class);
 
-        // DWHYoutube
+        // DWHYoutubeRepository
         $this->app->bind(DwhYoutubeRepositoryInterface::class, DwhYoutubeRepository::class);
 
-        // Youtube
+        // YoutubeRepository
         $this->app->bind(YoutubeRepositoryInterface::class, YoutubeRepository::class);
+
+        // YoutubeUsecase
+        $this->app->bind(DailyTrendYoutubeUsecaseInterface::class, DailyTrendYoutubeUsecase::class);
     }
 
     /**

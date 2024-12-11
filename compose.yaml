@@ -81,7 +81,7 @@ services:
         UID: ${UID}
         GID: ${GID}
       target: ${APP_BUILD_TARGET:-development}
-    command: php /workspace/src/artisan queue:work --verbose --tries=3 --timeout=600
+    command: php /workspace/src/artisan queue:work --verbose --tries=3 --timeout=60
     volumes:
       - type: bind
         source: .

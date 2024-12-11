@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Usecase\Job;
 
+use App\Enums\Category\CategoryEnum;
 use App\Repositories\DlYoutube\DlYoutubeRepositoryInterface;
 use App\Repositories\DwhYoutube\DwhYoutubeRepositoryInterface;
 use App\Repositories\Youtube\YoutubeRepositoryInterface;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\Log;
 
 class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
@@ -44,15 +46,15 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
      */
     private function storeDlYoutubeData(): void
     {
-        $categories = [1, 10, 17, 20, 26, 22, 25];
+        $categories = CategoryEnum::toArray();
 
         foreach ($categories as $category) {
             $categoryVideos = [];
             do {
-                $categoryVideos = $this->fetchYoutubeData($category);
+                $categoryVideos = array_merge($categoryVideos, $this->fetchYoutubeData($category));
 
-                if (! $this->pageToken) {
-                    $this->storeYoutubeData($categoryVideos);
+                if (!$this->pageToken) {
+                    $this->storeYoutubeData($categoryVideos, $category);
                     $this->allVideos = array_merge($this->allVideos, $categoryVideos);
                 }
             } while ($this->pageToken);
@@ -72,7 +74,12 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
         $response = $this->youtubeRepository->fetchYoutubeData($category, $this->pageToken);
         $this->pageToken = $response['nextPageToken'] ?? null;
 
-        return $response['items'];
+        return array_map(function ($data) use ($category) {
+            return [
+                ...$data,
+                'search_category_id' => $category,
+            ];
+        }, $response['items']);
     }
 
     /**
@@ -81,9 +88,9 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
      * @param array $categoryVideos
      * @return void
      */
-    private function storeYoutubeData(array $categoryVideos)
+    private function storeYoutubeData(array $categoryVideos, int $category)
     {
-        $categoryVideosData = $this->formatYoutubeData(categoryVideos: $categoryVideos);
+        $categoryVideosData = $this->formatYoutubeData($categoryVideos, $category);
         $this->dlYoutubeRepository->bulkInsert($categoryVideosData);
     }
 
@@ -93,10 +100,11 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
      * @param array $categoryVideos
      * @return array
      */
-    private function formatYoutubeData(array $categoryVideos): array
+    private function formatYoutubeData(array $categoryVideos, int $category): array
     {
-        return array_map(function ($categoryVideo) {
+        return array_map(function ($categoryVideo) use ($category) {
             return [
+                'search_category_id' => $category,
                 'video_data' => json_encode($categoryVideo),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -124,6 +132,7 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
     {
         return array_map(function ($allVideo) {
             return [
+                'search_category_id' => $allVideo['search_category_id'],
                 'video_id' => $allVideo['id'],
                 'title' => $allVideo['snippet']['title'],
                 'description' => $allVideo['snippet']['description'] ?? null,
@@ -132,9 +141,33 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
                 'view_count' => $allVideo['statistics']['viewCount'] ?? 0,
                 'like_count' => $allVideo['statistics']['likeCount'] ?? 0,
                 'comment_count' => $allVideo['statistics']['commentCount'] ?? 0,
-                'url' => "https://www.youtube.com/embed/{$allVideo['id']}",
+                'category_id' => ['snippet']['categoryId'] ?? null,
+                'url' => "https://www.youtube.com/watch?v={$allVideo['id']}",
+                'duration' => $allVideo['contentDetails']['duration'],
                 'published_at' => Carbon::parse($allVideo['snippet']['publishedAt'] ?? null)->format('Y-m-d H:i:s'),
+                'duration' => $this->isoFormat($allVideo['contentDetails']['duration']),
+                'created_at' => now(),
+                'updated_at' => now(),
             ];
         }, $this->allVideos);
+    }
+
+    private function isoFormat($isoDuration)
+    {
+        $interval = CarbonInterval::makeFromString($isoDuration);
+
+        $formatted = '';
+
+        if ($interval->h > 0) {
+            $formatted .= "{$interval->h}時間";
+        }
+        if ($interval->i > 0) {
+            $formatted .= "{$interval->i}分";
+        }
+        if ($interval->s > 0) {
+            $formatted .= "{$interval->s}秒";
+        }
+
+        return $formatted;
     }
 }
