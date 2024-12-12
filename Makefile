@@ -97,5 +97,7 @@ format-test:
 	docker compose exec app sh -c "cd src && ./vendor/bin/pint --test"
 front-format:
 	docker compose exec app sh -c "cd src && npm run format"
-job:
-	docker compose exec app sh -c "cd src && php artisan app:job-run"
+hour-job:
+	docker compose exec app sh -c "cd src && php artisan app:hour-job-run"
+aggregate-job:
+	docker compose exec app sh -c "cd src && php artisan app:aggregate-command"

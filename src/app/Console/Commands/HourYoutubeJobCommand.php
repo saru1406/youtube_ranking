@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Jobs\YoutubeJob;
-use App\Usecase\Job\RunYoutubeJobUsecaseInterface;
+use App\Jobs\HourYoutubeJob;
+use App\Usecase\Job\RunHourYoutubeJobUsecaseInterface;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class JobCommand extends Command
+class HourYoutubeJobCommand extends Command
 {
     public function __construct(
-        private readonly RunYoutubeJobUsecaseInterface $runYoutubeJobUsecase
+        private readonly RunHourYoutubeJobUsecaseInterface $runHourYoutubeJobUsecase
     ) {
         parent::__construct();
     }
@@ -24,7 +24,7 @@ class JobCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:job-run';
+    protected $signature = 'app:hour-job-run';
 
     /**
      * The console command description.
@@ -42,7 +42,7 @@ class JobCommand extends Command
             Log::info('実行開始');
 
             DB::transaction(function () {
-                YoutubeJob::dispatch($this->runYoutubeJobUsecase);
+                HourYoutubeJob::dispatch($this->runHourYoutubeJobUsecase);
             });
 
             Log::info('実行完了');

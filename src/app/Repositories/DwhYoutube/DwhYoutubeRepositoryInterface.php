@@ -36,4 +36,6 @@ interface DwhYoutubeRepositoryInterface
      * @return LengthAwarePaginator
      */
     public function fetchVideosByLastHourByCategoryIdWithPagination(int $categoryId, array $with = [], int $perPage = 20): LengthAwarePaginator;
+
+    public function fetchDwhYoutubeByDailyAggregate(): array;
 }

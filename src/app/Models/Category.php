@@ -19,12 +19,32 @@ class Category extends Model
     ];
 
     /**
-     * DlYoutubeVideoと紐づけ
+     * DLYoutubeVideoと紐づけ
      *
      * @return HasMany
      */
     public function dlYoutubeVideos(): HasMany
     {
         return $this->hasMany(DlYoutubeVideo::class, 'search_category_id', 'category_number');
+    }
+
+    /**
+     * DWHYoutubeVideoと紐づけ
+     *
+     * @return HasMany
+     */
+    public function dwhYoutubeVideos(): HasMany
+    {
+        return $this->hasMany(DwhYoutubeVideo::class, 'search_category_id', 'category_number');
+    }
+
+    /**
+     * DWHYoutubeVideoと紐づけ
+     *
+     * @return HasMany
+     */
+    public function dailyYoutubeVideos(): HasMany
+    {
+        return $this->hasMany(DailyYoutubeVideo::class, 'search_category_id', 'category_number');
     }
 }
