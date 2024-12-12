@@ -12,10 +12,20 @@ use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\Log;
 
-class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
+class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
 {
+    /**
+     * ページトークン
+     *
+     * @var
+     */
     private ?string $pageToken;
 
+    /**
+     * 全ビデオデータ
+     *
+     * @var array
+     */
     private array $allVideos;
 
     public function __construct(
