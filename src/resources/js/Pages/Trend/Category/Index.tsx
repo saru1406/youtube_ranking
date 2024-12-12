@@ -6,18 +6,17 @@ import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
 import { format } from 'date-fns';
 
-export default function Welcome({
+export default function TrendIndex({
     trend_data,
 }: {
     trend_data: DailyTrend[][];
 }) {
-    const formatViewCount = (count: number): string => {
+    const formatViewCount = (count: number) => {
         if (count >= 10000) {
             return `${Math.floor(count / 10000)}万`;
         }
         return count.toLocaleString();
     };
-
     const categoryLabels: { [key: string]: string } = {
         '0': '総合',
         '1': 'テレビ・映像作品',
@@ -33,7 +32,7 @@ export default function Welcome({
         <>
             <Head title='RankTube - YouTube再生回数・トレンドランキング' />
             <BaseLayout>
-                <div className='mt-12 mx-14'>
+                <div className='mt-16 mx-14'>
                     <div className='relative mb-10'>
                         <h2 className='text-2xl'>急上昇ジャンル別ランキング</h2>
                         <div className='absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-red-500 via-yellow-500 to-yellow-100'></div>
@@ -67,11 +66,7 @@ export default function Welcome({
                                             </div>
                                             <div className='ml-4'>
                                                 <p className='font-bold'>
-                                                {trend.title?.length >
-                                                    85
-                                                        ? `${trend.title.substring(0, 85)}...`
-                                                        : trend.title ||
-                                                          null}
+                                                    {trend.title}
                                                 </p>
                                                 <div className='flex text-xs my-2'>
                                                     <p className='text-gray-500'>
