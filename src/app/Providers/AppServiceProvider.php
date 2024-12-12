@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Repositories\Category\CategoryRepository;
+use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\DlYoutube\DlYoutubeRepository;
 use App\Repositories\DlYoutube\DlYoutubeRepositoryInterface;
 use App\Repositories\DwhYoutube\DwhYoutubeRepository;
@@ -12,6 +14,8 @@ use App\Repositories\Youtube\YoutubeRepository;
 use App\Repositories\Youtube\YoutubeRepositoryInterface;
 use App\Usecase\Job\RunYoutubeJobUsecase;
 use App\Usecase\Job\RunYoutubeJobUsecaseInterface;
+use App\Usecase\Youtube\DailyTrendByCategoryYoutubeUsecase;
+use App\Usecase\Youtube\DailyTrendByCategoryYoutubeUsecaseInterface;
 use App\Usecase\Youtube\DailyTrendYoutubeUsecase;
 use App\Usecase\Youtube\DailyTrendYoutubeUsecaseInterface;
 use Illuminate\Support\Facades\Vite;
@@ -38,6 +42,10 @@ class AppServiceProvider extends ServiceProvider
 
         // YoutubeUsecase
         $this->app->bind(DailyTrendYoutubeUsecaseInterface::class, DailyTrendYoutubeUsecase::class);
+        $this->app->bind(DailyTrendByCategoryYoutubeUsecaseInterface::class, DailyTrendByCategoryYoutubeUsecase::class);
+
+        // CategoryRepository
+        $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
     }
 
     /**

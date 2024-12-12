@@ -53,7 +53,7 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
             do {
                 $categoryVideos = array_merge($categoryVideos, $this->fetchYoutubeData($category));
 
-                if (!$this->pageToken) {
+                if (! $this->pageToken) {
                     $this->storeYoutubeData($categoryVideos, $category);
                     $this->allVideos = array_merge($this->allVideos, $categoryVideos);
                 }
@@ -141,9 +141,8 @@ class RunYoutubeJobUsecase implements RunYoutubeJobUsecaseInterface
                 'view_count' => $allVideo['statistics']['viewCount'] ?? 0,
                 'like_count' => $allVideo['statistics']['likeCount'] ?? 0,
                 'comment_count' => $allVideo['statistics']['commentCount'] ?? 0,
-                'category_id' => ['snippet']['categoryId'] ?? null,
+                'category_id' => $allVideo['snippet']['categoryId'] ?? null,
                 'url' => "https://www.youtube.com/watch?v={$allVideo['id']}",
-                'duration' => $allVideo['contentDetails']['duration'],
                 'published_at' => Carbon::parse($allVideo['snippet']['publishedAt'] ?? null)->format('Y-m-d H:i:s'),
                 'duration' => $this->isoFormat($allVideo['contentDetails']['duration']),
                 'created_at' => now(),

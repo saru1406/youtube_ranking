@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DlYoutubeVideo extends Model
 {
@@ -19,4 +20,14 @@ class DlYoutubeVideo extends Model
     protected $casts = [
         'video_data' => 'array',
     ];
+
+    /**
+     * カテゴリと紐づけ
+     *
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'search_category_id', 'category_number');
+    }
 }

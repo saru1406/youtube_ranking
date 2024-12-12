@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DwhYoutubeVideo extends Model
 {
@@ -26,4 +27,14 @@ class DwhYoutubeVideo extends Model
         'duration',
         'published_at',
     ];
+
+    /**
+     * カテゴリと紐づけ
+     *
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'search_category_id', 'category_number');
+    }
 }

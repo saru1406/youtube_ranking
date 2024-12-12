@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Enums\Category;
 
 enum CategoryEnum: int
@@ -51,7 +53,7 @@ enum CategoryEnum: int
      */
     public static function toArray(): array
     {
-        return array_map(fn($case) => $case->value, self::cases());
+        return array_map(fn ($case) => $case->value, self::cases());
     }
 
     /**

@@ -39,7 +39,7 @@ export default function Sidebar() {
                 </div>
                 <div className='flex-1 flex flex-col justify-end mb-5'>
                     <Link
-                        href="#"
+                        href='#'
                         className='hover:bg-cyan-600 block py-5 pl-8 text-left text-black mb-10'
                         as='button'
                     >
