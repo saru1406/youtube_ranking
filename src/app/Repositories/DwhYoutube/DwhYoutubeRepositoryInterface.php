@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories\DwhYoutube;
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 interface DwhYoutubeRepositoryInterface
@@ -17,11 +18,22 @@ interface DwhYoutubeRepositoryInterface
     public function bulkInsert(array $data): void;
 
     /**
-     * DwhYoutubeから直近1時間の動画を取得
+     * カテゴリID毎にDwhYoutubeから直近1時間の動画を取得
      *
      * @param int $categoryId
+     * @param array $with
      * @param ?int $limit
      * @return Collection
      */
-    public function fetchVideosByLastHourByCategory(int $categoryId, ?int $limit = null): Collection;
+    public function fetchVideosByLastHourByCategoryId(int $categoryId, array $with = [], ?int $limit = null): Collection;
+
+    /**
+     * カテゴリID毎にDwhYoutubeから直近1時間の動画をページネーションで取得
+     *
+     * @param int $categoryId
+     * @param array $with
+     * @param int $perPage
+     * @return LengthAwarePaginator
+     */
+    public function fetchVideosByLastHourByCategoryIdWithPagination(int $categoryId, array $with = [], int $perPage = 20): LengthAwarePaginator;
 }

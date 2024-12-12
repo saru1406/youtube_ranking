@@ -20,15 +20,24 @@ class DailyTrendYoutubeUsecase implements DailyTrendYoutubeUsecaseInterface
         return $this->fetchVideosByCategory();
     }
 
+    /**
+     * Youtubeデータを取得しカテゴリIdごとにグループ化
+     *
+     * @return Collection
+     */
     private function fetchVideosByCategory()
     {
         $categoryIds = CategoryEnum::toArray();
         $allVideosData = [];
         foreach ($categoryIds as $categoryId) {
-            $videosData = $this->dwhYoutubeRepository->fetchVideosByLastHourByCategory($categoryId, 3);
+            $videosData = $this->dwhYoutubeRepository->fetchVideosByLastHourByCategoryId(
+                $categoryId,
+                ['category:category_number,category_physical_name'],
+                3
+            );
             $allVideosData = array_merge($allVideosData, $videosData->toArray());
         }
 
-        return collect($allVideosData)->groupBy('search_category_id');
+        return collect($allVideosData)->groupBy('category.category_physical_name');
     }
 }

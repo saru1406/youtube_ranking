@@ -1,10 +1,6 @@
-import Sidebar from '@/Components/Sidebar';
 import BaseLayout from '@/Layouts/BaseLayout';
-import { PageProps } from '@/types';
 import { DailyTrend } from '@/types/daily_trend';
 import { Head, Link } from '@inertiajs/react';
-import { useState } from 'react';
-import { format } from 'date-fns';
 
 export default function Welcome({
     trend_data,
@@ -19,16 +15,16 @@ export default function Welcome({
     };
 
     const categoryLabels: { [key: string]: string } = {
-        '0': '総合',
-        '1': 'テレビ・映像作品',
-        '10': '音楽',
-        '17': 'スポーツ',
-        '20': 'ゲーム',
-        '24': 'エンターテインメント',
-        '25': 'ニュース',
-        '26': '知識・アイディア',
+        generals: '総合',
+        'video-productions': 'テレビ・映像作品',
+        musics: '音楽',
+        sports: 'スポーツ',
+        games: 'ゲーム',
+        entertainments: 'エンターテインメント',
+        news: 'ニュース',
+        'how-to': '知識・アイディア',
     };
-    const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+
     return (
         <>
             <Head title='RankTube - YouTube再生回数・トレンドランキング' />
@@ -40,10 +36,16 @@ export default function Welcome({
                     </div>
                     <div className='my-5 w-11/12'>
                         {Object.entries(trend_data).map(([key, trends]) => (
-                            <div key={key} className='mb-16'>
+                            <div key={key} className='mb-10'>
                                 <div className='relative mb-10'>
                                     <div className='flex'>
-                                        <Link href="" className='text-xl'>
+                                        <Link
+                                            href={route(
+                                                'daily.trend.category',
+                                                key
+                                            )}
+                                            className='text-xl'
+                                        >
                                             {categoryLabels[key] ||
                                                 `カテゴリー ${key}`}
                                         </Link>
@@ -67,11 +69,9 @@ export default function Welcome({
                                             </div>
                                             <div className='ml-4'>
                                                 <p className='font-bold'>
-                                                {trend.title?.length >
-                                                    85
+                                                    {trend.title?.length > 85
                                                         ? `${trend.title.substring(0, 85)}...`
-                                                        : trend.title ||
-                                                          null}
+                                                        : trend.title || null}
                                                 </p>
                                                 <div className='flex text-xs my-2'>
                                                     <p className='text-gray-500'>
@@ -110,6 +110,17 @@ export default function Welcome({
                                         <hr />
                                     </div>
                                 ))}
+                                <div className='text-right mt-5'>
+                                    <Link
+                                        href={route(
+                                            'daily.trend.category',
+                                            key
+                                        )}
+                                        className='text-blue-700'
+                                    >
+                                        もっとみる
+                                    </Link>
+                                </div>
                             </div>
                         ))}
                     </div>
