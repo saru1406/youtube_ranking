@@ -10,7 +10,6 @@ export default function TrendIndex({
 }: {
     trend_data: Pagination<DailyTrend>;
 }) {
-    console.log(trend_data);
     const fullPath = window.location.pathname;
     const path = fullPath.replace('/', '');
 

@@ -7,7 +7,6 @@ export default function Welcome({
 }: {
     trend_data: DailyTrend[][];
 }) {
-    console.log(trend_data);
     const formatViewCount = (count: number): string => {
         if (count >= 10000) {
             return `${Math.floor(count / 10000)}万`;
