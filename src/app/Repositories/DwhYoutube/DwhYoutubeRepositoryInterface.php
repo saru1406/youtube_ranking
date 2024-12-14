@@ -28,6 +28,13 @@ interface DwhYoutubeRepositoryInterface
     public function fetchVideosByLastHourByCategoryId(int $categoryId, array $with = [], ?int $limit = null): Collection;
 
     /**
+     * DWHYoutubeからvideo_idを全量取得
+     *
+     * @return Collection
+     */
+    public function fetchDwhYoutubeVideoIds(): Collection;
+
+    /**
      * カテゴリID毎にDwhYoutubeから直近1時間の動画をページネーションで取得
      *
      * @param int $categoryId
@@ -36,6 +43,4 @@ interface DwhYoutubeRepositoryInterface
      * @return LengthAwarePaginator
      */
     public function fetchVideosByLastHourByCategoryIdWithPagination(int $categoryId, array $with = [], int $perPage = 20): LengthAwarePaginator;
-
-    public function fetchDwhYoutubeByDailyAggregate(): array;
 }
