@@ -44,4 +44,25 @@ class YoutubeRepository implements YoutubeRepositoryInterface
 
         throw new \Exception('YouTube API request failed: '.$response->status());
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchYoutubeDataByVideoId(string $videoIds): array
+    {
+        $query = [
+            'part' => 'snippet,statistics,contentDetails',
+            'id' => $videoIds,
+            'key' => config('apiKey.google_api_key'),
+        ];
+        $response = Http::get('https://www.googleapis.com/youtube/v3/videos', $query);
+
+        if ($response->successful()) {
+            Log::info('Youtube API 取得完了');
+
+            return $response->json();
+        }
+
+        throw new \Exception('YouTube API request failed: '.$response->status());
+    }
 }

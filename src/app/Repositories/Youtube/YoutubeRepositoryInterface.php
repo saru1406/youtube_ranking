@@ -14,4 +14,12 @@ interface YoutubeRepositoryInterface
      * @return array
      */
     public function fetchYoutubeData(int $categoryId, ?string $pageToken = null): array;
+
+    /**
+     * videoIdからYoutubeのJSONデータ取得
+     *
+     * @param array $videoIds
+     * @return string
+     */
+    public function fetchYoutubeDataByVideoId(string $videoIds): array;
 }

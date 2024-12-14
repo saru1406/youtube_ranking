@@ -13,4 +13,12 @@ interface DlYoutubeRepositoryInterface
      * @return void
      */
     public function bulkInsert(array $data): void;
+
+    /**
+     * 日時が保存されているか存在確認
+     *
+     * @param string $dateHour
+     * @return bool
+     */
+    public function existsByDateHour(string $dateHour): bool;
 }

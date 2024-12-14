@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('daily_youtube_videos', function (Blueprint $table) {
-            $table->date('target_date')->comment('対象日');
-            $table->unsignedBigInteger('daily_view_count')->comment('１日の再生回数');
+        Schema::create('dwh_daily_youtube_videos', function (Blueprint $table) {
+            $table->id()->comment('ID');
             $table->unsignedTinyInteger('search_category_id')->comment('検索カテゴリID');
             $table->foreign('search_category_id')->references('category_number')->on('categories')->onUpdate('cascade');
             $table->string('video_id')->comment('Youtube動画ID');
@@ -37,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('daily_youtube_videos');
+        Schema::dropIfExists('dwh_daily_youtube_videos');
     }
 };

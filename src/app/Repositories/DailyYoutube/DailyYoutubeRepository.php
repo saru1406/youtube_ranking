@@ -15,4 +15,12 @@ class DailyYoutubeRepository implements DailyYoutubeRepositoryInterface
     {
         DailyYoutubeVideo::insert($data);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function delete(): void
+    {
+        DailyYoutubeVideo::query()->delete();
+    }
 }

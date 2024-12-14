@@ -10,6 +10,7 @@ use App\Repositories\DwhYoutube\DwhYoutubeRepositoryInterface;
 use App\Repositories\Youtube\YoutubeRepositoryInterface;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use DomainException;
 use Illuminate\Support\Facades\Log;
 
 class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
@@ -42,11 +43,27 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
      */
     public function execute(): void
     {
+        $this->handle();
+
         $this->storeDlYoutubeData();
         Log::info('DL保存完了');
 
         $this->storeDwhYoutubeData();
         Log::info('DWH保存完了');
+    }
+
+    /**
+     * ジョブが実行されていないことを確認
+     * @throws DomainException
+     * @return void
+     */
+    private function handle(): void
+    {
+        $exists = $this->dlYoutubeRepository->existsByDateHour(Carbon::now()->format('Y-m-d H'));
+        if ($exists) {
+            throw new DomainException("現時刻のジョブは既に実行されています。");
+        }
+        return;
     }
 
     /**
@@ -63,7 +80,7 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
             do {
                 $categoryVideos = array_merge($categoryVideos, $this->fetchYoutubeData($category));
 
-                if (! $this->pageToken) {
+                if (!$this->pageToken) {
                     $this->storeYoutubeData($categoryVideos, $category);
                     $this->allVideos = array_merge($this->allVideos, $categoryVideos);
                 }
@@ -161,6 +178,12 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
         }, $this->allVideos);
     }
 
+    /**
+     * isoを時間に変換
+     *
+     * @param mixed $isoDuration
+     * @return string
+     */
     private function isoFormat($isoDuration)
     {
         $interval = CarbonInterval::makeFromString($isoDuration);

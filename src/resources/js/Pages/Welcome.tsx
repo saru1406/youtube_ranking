@@ -34,10 +34,10 @@ export default function Welcome({
                         <h2 className='text-2xl'>急上昇ジャンル別ランキング</h2>
                         <div className='absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-red-500 via-yellow-500 to-yellow-100'></div>
                     </div>
-                    <div className='my-5 w-11/12'>
+                    <div className='my-5 w-11/12 ml-7'>
                         {Object.entries(trend_data).map(([key, trends]) => (
                             <div key={key} className='mb-10'>
-                                <div className='relative mb-10'>
+                                <div className='relative mb-5'>
                                     <div className='flex'>
                                         <Link
                                             href={route(
@@ -55,7 +55,7 @@ export default function Welcome({
                                 {trends.map((trend: any) => (
                                     <div className='' key={trend.video_id}>
                                         <a
-                                            className='flex my-3'
+                                            className='flex my-2 p-2 hover:shadow-xl bg-white hover:bg-gray-50 transition-colors duration-300 rounded-md'
                                             href={trend.url}
                                             target='_blank'
                                             rel='noopener noreferrer'

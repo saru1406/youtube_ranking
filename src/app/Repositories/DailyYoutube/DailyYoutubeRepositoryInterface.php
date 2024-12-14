@@ -7,10 +7,17 @@ namespace App\Repositories\DailyYoutube;
 interface DailyYoutubeRepositoryInterface
 {
     /**
-     * DlYoutubeにデータを一括保存
+     * DailyYoutubeにデータを一括保存
      *
      * @param array $data
      * @return void
      */
     public function bulkInsert(array $data): void;
+
+    /**
+     * DailyYoutubeデータをすべて削除
+     *
+     * @return void
+     */
+    public function delete(): void;
 }

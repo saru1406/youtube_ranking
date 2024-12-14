@@ -68,7 +68,7 @@ export default function TrendIndex({
                         {trend_data.data.map((trend) => (
                             <div className='' key={trend.video_id}>
                                 <a
-                                    className='flex my-3'
+                                    className='flex my-2 p-2 hover:shadow-xl bg-white hover:bg-gray-50 transition-colors duration-300 rounded-md'
                                     href={trend.url}
                                     target='_blank'
                                     rel='noopener noreferrer'
@@ -80,7 +80,7 @@ export default function TrendIndex({
                                             className='w-full h-full object-cover rounded-md'
                                         />
                                     </div>
-                                    <div className='ml-4'>
+                                    <div className='ml-4 mt-0.5'>
                                         <p className='font-bold'>
                                             {trend.title}
                                         </p>
