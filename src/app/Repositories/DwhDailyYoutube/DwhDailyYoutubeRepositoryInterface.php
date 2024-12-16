@@ -15,4 +15,6 @@ interface DwhDailyYoutubeRepositoryInterface
     public function bulkInsert(array $data): void;
 
     public function fetchDwhYoutubeByDailyAggregate(): array;
+
+    public function fetchDwhYoutubeByWeekAggregate(): array;
 }

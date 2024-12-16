@@ -13,13 +13,13 @@ export default function Sidebar() {
                         RankTube
                     </a>
                     <Link
-                        href='#'
+                        href={route('daily.trend')}
                         className='hover:text-gray-800 hover:bg-gradient-to-r from-blue-700 via-blue-500 to-blue-300 block py-4 pl-8 my-3'
                     >
-                        デイリーランキング
+                        急上昇
                     </Link>
                     <Link
-                        href='#'
+                        href={route('week.trend')}
                         className='hover:text-gray-800 hover:bg-gradient-to-r from-blue-700 via-blue-500 to-blue-300 block py-4 pl-8 my-3'
                     >
                         週間ランキング

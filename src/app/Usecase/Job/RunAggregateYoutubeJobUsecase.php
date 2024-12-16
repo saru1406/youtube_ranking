@@ -8,6 +8,7 @@ use App\Repositories\DailyYoutube\DailyYoutubeRepositoryInterface;
 use App\Repositories\DlDailyYoutube\DlDailyYoutubeRepositoryInterface;
 use App\Repositories\DwhDailyYoutube\DwhDailyYoutubeRepositoryInterface;
 use App\Repositories\DwhYoutube\DwhYoutubeRepositoryInterface;
+use App\Repositories\WeekYoutube\WeekYoutubeRepositoryInterface;
 use App\Repositories\Youtube\YoutubeRepositoryInterface;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
@@ -16,9 +17,13 @@ use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Expr\Throw_;
+use Str;
+use Symfony\Component\Uid\Ulid;
 
 class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInterface
 {
+    private string $ulid;
+
     /**
      * チャンクサイズ
      *
@@ -26,14 +31,20 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
      */
     private int $chunkSize;
 
+
+    private Carbon $now;
+
     public function __construct(
         private readonly YoutubeRepositoryInterface $youtubeRepository,
         private readonly DwhYoutubeRepositoryInterface $dwhYoutubeRepository,
         private readonly DailyYoutubeRepositoryInterface $dailyYoutubeRepository,
         private readonly DlDailyYoutubeRepositoryInterface $dlDailyYoutubeRepository,
         private readonly DwhDailyYoutubeRepositoryInterface $dwhDailyYoutubeRepository,
+        private readonly WeekYoutubeRepositoryInterface $weekYoutubeRepository
     ) {
+        $this->ulid = (string) Str::ulid();
         $this->chunkSize = 1500;
+        $this->now = now();
     }
 
     /**
@@ -41,7 +52,7 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
      */
     public function execute(): void
     {
-        $this->handle();
+        // $this->handle();
 
         $this->dlDailyYoutubeData();
         Log::info('DL日別保存完了');
@@ -51,6 +62,9 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
 
         $this->dailyAggregateYoutubeData();
         Log::info('DM日別集計保存完了');
+
+        $this->weekAggregateYoutubeData();
+        Log::info('DM週別集計保存完了');
     }
 
     /**
@@ -60,7 +74,7 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
      */
     private function handle(): void
     {
-        $exists = $this->dlDailyYoutubeRepository->existsByDate(Carbon::now()->format('Y-m-d'));
+        $exists = $this->dlDailyYoutubeRepository->existsByDate($this->now->format('Y-m-d'));
         if ($exists) {
             throw new DomainException("本日のジョブは既に実行されています。");
         }
@@ -109,10 +123,11 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
         return $categoryVideos->map(function ($videos, $key) {
             return $videos->flatten(1)->map(function ($video) use ($key) {
                 return [
+                    'ulid' => $this->ulid,
                     'search_category_id' => $key,
                     'video_data' => json_encode($video),
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'created_at' => $this->now,
+                    'updated_at' => $this->now,
                 ];
             });
         });
@@ -132,15 +147,15 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
     }
 
     /**
-     * DLYoutubeから取得したデータをDWHYoutubeへ整形・保存
+     * DWHYoutubeから取得したデータをDWHYoutubeへ整形・保存
      *
      * @return void
      */
     private function dwhDailyYoutubeData()
     {
-        $dlDailyYoutubeData = $this->dlDailyYoutubeRepository->fetchDlDailyYoutubeByDate(Carbon::now()->format('Y-m-d'));
-        $formatDlDailyYoutubeData = $this->formatDwhDailyYoutubeData($dlDailyYoutubeData);
-        $this->dwhDailyYoutubeRepository->bulkInsert($formatDlDailyYoutubeData->all());
+        $dlDailyYoutubeData = $this->dlDailyYoutubeRepository->fetchDlDailyYoutubeByUlid($this->ulid);
+        $formatDlDailyYoutubeData = $this->formatDwhDailyYoutubeData($dlDailyYoutubeData)->all();
+        $this->storeYoutubeData('dwh', $formatDlDailyYoutubeData);
     }
 
     /**
@@ -153,6 +168,7 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
     {
         return $dlDailyYoutubeData->map(function ($dlDailyYoutube) {
             return [
+                'ulid' => $this->ulid,
                 'search_category_id' => $dlDailyYoutube['search_category_id'],
                 'video_id' => $dlDailyYoutube->video_data['id'],
                 'title' => $dlDailyYoutube->video_data['snippet']['title'],
@@ -166,8 +182,8 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
                 'url' => "https://www.youtube.com/watch?v={$dlDailyYoutube->video_data['id']}",
                 'published_at' => Carbon::parse($dlDailyYoutube->video_data['snippet']['publishedAt'] ?? null)->format('Y-m-d H:i:s'),
                 'duration' => $this->isoFormat($dlDailyYoutube->video_data['contentDetails']['duration']),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => $this->now,
+                'updated_at' => $this->now,
             ];
         });
     }
@@ -207,7 +223,7 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
         $this->dailyYoutubeRepository->delete();
         $dailyAggregateYoutubeData = $this->dwhDailyYoutubeRepository->fetchDwhYoutubeByDailyAggregate();
         $dailyAggregateYoutubeToArray = $this->dailyAggregateYoutubeDataFormat($dailyAggregateYoutubeData);
-        $this->storeDailyAggregateYoutubeData($dailyAggregateYoutubeToArray);
+        $this->storeYoutubeData('daily', $dailyAggregateYoutubeToArray);
     }
 
     /**
@@ -240,17 +256,72 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
     }
 
     /**
-     * 日別Youtube集計データを保存
+     * DWHYoutubeから取得したデータを週別に集計
      *
-     * @param array $dailyAggregateYoutubeToArray
+     * @return array
+     */
+    private function weekAggregateYoutubeData(): void
+    {
+        $this->weekYoutubeRepository->delete();
+        $weekAggregateYoutubeData = $this->dwhDailyYoutubeRepository->fetchDwhYoutubeByWeekAggregate();
+        $weekAggregateYoutubeToArray = $this->weekAggregateYoutubeDataFormat($weekAggregateYoutubeData);
+        $this->storeYoutubeData('week', $weekAggregateYoutubeToArray);
+    }
+
+    /**
+     * Youtubeデータを保存
+     *
+     * @param array $youtubeToArray
      * @return void
      */
-    private function storeDailyAggregateYoutubeData(array $dailyAggregateYoutubeToArray): void
+    private function storeYoutubeData(string $repository, array $youtubeToArray): void
     {
-        $chunksData = array_chunk($dailyAggregateYoutubeToArray, $this->chunkSize);
+        $chunksData = array_chunk($youtubeToArray, $this->chunkSize);
 
         foreach ($chunksData as $chunkData) {
-            $this->dailyYoutubeRepository->bulkInsert($chunkData);
+            switch($repository) {
+                case "dwh":
+                    $this->dwhDailyYoutubeRepository->bulkInsert($chunkData);
+                    break;
+                case "daily":
+                    $this->dailyYoutubeRepository->bulkInsert($chunkData);
+                    break;
+                case "week":
+                    $this->weekYoutubeRepository->bulkInsert($chunkData);
+                    break;
+            }
         }
+    }
+
+    /**
+     * 週別Youtube集計データを整形
+     *
+     * @param array $weekAggregateYoutubeData
+     * @return array
+     */
+    private function weekAggregateYoutubeDataFormat(array $weekAggregateYoutubeData): array
+    {
+        return array_map(function ($weekAggregateYoutube) {
+            return [
+                'search_category_id' => $weekAggregateYoutube->search_category_id,
+                'target_week' => $weekAggregateYoutube->target_week,
+                'ranking' => $weekAggregateYoutube->ranking,
+                'week_view_count' => $weekAggregateYoutube->week_view_count,
+                'video_id' => $weekAggregateYoutube->video_id,
+                'title' => $weekAggregateYoutube->title,
+                'description' => $weekAggregateYoutube->description,
+                'channel_id' => $weekAggregateYoutube->channel_id,
+                'channel_name' => $weekAggregateYoutube->channel_name,
+                'view_count' => $weekAggregateYoutube->view_count,
+                'like_count' => $weekAggregateYoutube->like_count,
+                'comment_count' => $weekAggregateYoutube->comment_count,
+                'category_id' => $weekAggregateYoutube->category_id,
+                'url' => $weekAggregateYoutube->url,
+                'duration' => $weekAggregateYoutube->duration,
+                'published_at' => $weekAggregateYoutube->published_at,
+                'created_at' => $this->now,
+                'updated_at' => $this->now,
+            ];
+        }, $weekAggregateYoutubeData);
     }
 }

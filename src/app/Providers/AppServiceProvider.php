@@ -16,16 +16,20 @@ use App\Repositories\DwhDailyYoutube\DwhDailyYoutubeRepository;
 use App\Repositories\DwhDailyYoutube\DwhDailyYoutubeRepositoryInterface;
 use App\Repositories\DwhYoutube\DwhYoutubeRepository;
 use App\Repositories\DwhYoutube\DwhYoutubeRepositoryInterface;
+use App\Repositories\WeekYoutube\WeekYoutubeRepository;
+use App\Repositories\WeekYoutube\WeekYoutubeRepositoryInterface;
 use App\Repositories\Youtube\YoutubeRepository;
 use App\Repositories\Youtube\YoutubeRepositoryInterface;
 use App\Usecase\Job\RunAggregateYoutubeJobUsecase;
 use App\Usecase\Job\RunAggregateYoutubeJobUsecaseInterface;
 use App\Usecase\Job\RunHourYoutubeJobUsecase;
 use App\Usecase\Job\RunHourYoutubeJobUsecaseInterface;
-use App\Usecase\Youtube\DailyTrendByCategoryYoutubeUsecase;
-use App\Usecase\Youtube\DailyTrendByCategoryYoutubeUsecaseInterface;
-use App\Usecase\Youtube\DailyTrendYoutubeUsecase;
-use App\Usecase\Youtube\DailyTrendYoutubeUsecaseInterface;
+use App\Usecase\Youtube\Daily\DailyTrendByCategoryYoutubeUsecase;
+use App\Usecase\Youtube\Daily\DailyTrendByCategoryYoutubeUsecaseInterface;
+use App\Usecase\Youtube\Daily\DailyTrendYoutubeUsecase;
+use App\Usecase\Youtube\Daily\DailyTrendYoutubeUsecaseInterface;
+use App\Usecase\Youtube\Week\WeekTrendYoutubeUsecase;
+use App\Usecase\Youtube\Week\WeekTrendYoutubeUsecaseInterface;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
@@ -55,12 +59,18 @@ class AppServiceProvider extends ServiceProvider
         // DailyYoutubeRepository
         $this->app->bind(DailyYoutubeRepositoryInterface::class, DailyYoutubeRepository::class);
 
+        // WeekYoutubeRepository
+        $this->app->bind(WeekYoutubeRepositoryInterface::class, WeekYoutubeRepository::class);
+
         // YoutubeRepository
         $this->app->bind(YoutubeRepositoryInterface::class, YoutubeRepository::class);
 
-        // YoutubeUsecase
+        // DailyYoutubeUsecase
         $this->app->bind(DailyTrendYoutubeUsecaseInterface::class, DailyTrendYoutubeUsecase::class);
         $this->app->bind(DailyTrendByCategoryYoutubeUsecaseInterface::class, DailyTrendByCategoryYoutubeUsecase::class);
+
+        // WeekYoutubeUsecase
+        $this->app->bind(WeekTrendYoutubeUsecaseInterface::class, WeekTrendYoutubeUsecase::class);
 
         // CategoryRepository
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);

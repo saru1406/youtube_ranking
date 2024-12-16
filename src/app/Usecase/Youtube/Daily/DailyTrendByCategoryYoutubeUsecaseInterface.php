@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Usecase\Youtube;
+namespace App\Usecase\Youtube\Daily;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 

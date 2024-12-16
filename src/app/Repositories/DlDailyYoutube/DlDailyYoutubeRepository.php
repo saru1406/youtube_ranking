@@ -20,9 +20,9 @@ class DlDailyYoutubeRepository implements DlDailyYoutubeRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchDlDailyYoutubeByDate(string $date): Collection
+    public function fetchDlDailyYoutubeByUlid(string $ulid): Collection
     {
-        return DlDailyYoutubeVideo::whereDate('created_at', $date)->get();
+        return DlDailyYoutubeVideo::where('ulid', $ulid)->get();
     }
 
     /**

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('dl_daily_youtube_videos', function (Blueprint $table) {
-            $table->id()->comment('ID');
+            $table->ulid()->comment('ULID');
             $table->unsignedTinyInteger('search_category_id')->comment('検索カテゴリID');
             $table->foreign('search_category_id')->references('category_number')->on('categories')->onUpdate('cascade');
             $table->json('video_data')->comment('動画情報');

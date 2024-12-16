@@ -17,16 +17,16 @@ interface DlDailyYoutubeRepositoryInterface
     public function bulkInsert(array $data): void;
 
     /**
-     * 日付からDlDailyYoutubeを取得
+     * ulidからDlDailyYoutubeを取得
      *
-     * @param string $date
+     * @param string $ulid
      * @return Collection
      */
-    public function fetchDlDailyYoutubeByDate(string $date): Collection;
+    public function fetchDlDailyYoutubeByUlid(string $ulid): Collection;
 
     /**
      * 日付が保存されているか存在確認
-     * 
+     *
      * @param string $date
      * @return bool
      */

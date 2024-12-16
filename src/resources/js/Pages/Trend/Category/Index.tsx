@@ -11,7 +11,9 @@ export default function TrendIndex({
     trend_data: Pagination<DailyTrend>;
 }) {
     const fullPath = window.location.pathname;
-    const path = fullPath.replace('/', '');
+    const path = fullPath.split("/")
+    console.log(path)
+    const categoryPath = path[path.length -1];
 
     const formatViewCount = (count: number) => {
         if (count >= 10000) {
@@ -43,13 +45,13 @@ export default function TrendIndex({
                             急上昇ジャンル別ランキング
                         </Link>
                         ＞ 急上昇
-                        {categoryLabels[path] || `カテゴリー ${path}`}ランキング
+                        {categoryLabels[categoryPath] || `カテゴリー ${path}`}ランキング
                     </div>
                     <div className='mb-10'>
                         <div className='flex items-center'>
                             <h2 className='text-2xl'>
                                 急上昇
-                                {categoryLabels[path] || `カテゴリー ${path}`}
+                                {categoryLabels[categoryPath] || `カテゴリー ${path}`}
                                 ランキング
                             </h2>
                             <div className='ml-auto'>
