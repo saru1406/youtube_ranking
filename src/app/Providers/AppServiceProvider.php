@@ -28,6 +28,8 @@ use App\Usecase\Youtube\Daily\DailyTrendByCategoryYoutubeUsecase;
 use App\Usecase\Youtube\Daily\DailyTrendByCategoryYoutubeUsecaseInterface;
 use App\Usecase\Youtube\Daily\DailyTrendYoutubeUsecase;
 use App\Usecase\Youtube\Daily\DailyTrendYoutubeUsecaseInterface;
+use App\Usecase\Youtube\Week\WeekTrendByCategoryYoutubeUsecase;
+use App\Usecase\Youtube\Week\WeekTrendByCategoryYoutubeUsecaseInterface;
 use App\Usecase\Youtube\Week\WeekTrendYoutubeUsecase;
 use App\Usecase\Youtube\Week\WeekTrendYoutubeUsecaseInterface;
 use Illuminate\Support\Facades\Vite;
@@ -71,6 +73,7 @@ class AppServiceProvider extends ServiceProvider
 
         // WeekYoutubeUsecase
         $this->app->bind(WeekTrendYoutubeUsecaseInterface::class, WeekTrendYoutubeUsecase::class);
+        $this->app->bind(WeekTrendByCategoryYoutubeUsecaseInterface::class, WeekTrendByCategoryYoutubeUsecase::class);
 
         // CategoryRepository
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);

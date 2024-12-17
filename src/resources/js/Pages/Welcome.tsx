@@ -28,7 +28,7 @@ export default function Welcome({
     return (
         <>
             <Head title='RankTube - YouTube再生回数・トレンドランキング' />
-            <BaseLayout>
+            <BaseLayout path={route('daily.trend')}>
                 <div className='mt-12 mx-14'>
                     <div className='relative mb-10'>
                         <h2 className='text-2xl'>急上昇ジャンル別ランキング</h2>

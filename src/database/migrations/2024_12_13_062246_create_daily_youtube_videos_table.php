@@ -29,6 +29,8 @@ return new class extends Migration
             $table->string('duration')->comment('再生時間');
             $table->timestamp('published_at')->nullable()->comment('公開日時');
             $table->timestamps();
+
+            $table->unique(['target_date', 'search_category_id', 'video_id'], 'unique_daily_youtube_video');
         });
     }
 

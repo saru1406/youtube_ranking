@@ -34,23 +34,23 @@ export default function TrendIndex({
     return (
         <>
             <Head title='RankTube - YouTube再生回数・トレンドランキング' />
-            <BaseLayout path={route('daily.trend')}>
+            <BaseLayout path={route('week.trend')}>
                 <div className='mb-16 mt-6 mx-14'>
                     <div className='text-sm mb-10'>
                         <Link
-                            href={route('daily.trend')}
+                            href={route('week.trend')}
                             className='text-blue-700'
                         >
-                            急上昇ジャンル別ランキング
+                            週間ジャンル別ランキング
                         </Link>
-                        ＞ 急上昇
+                        ＞ 週間
                         {categoryLabels[categoryPath] || `カテゴリー ${path}`}
                         ランキング
                     </div>
                     <div className='mb-10'>
                         <div className='flex items-center'>
                             <h2 className='text-2xl'>
-                                急上昇
+                                週間
                                 {categoryLabels[categoryPath] ||
                                     `カテゴリー ${path}`}
                                 ランキング

@@ -13,12 +13,9 @@ use App\Repositories\Youtube\YoutubeRepositoryInterface;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use DomainException;
-use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use PhpParser\Node\Expr\Throw_;
 use Str;
-use Symfony\Component\Uid\Ulid;
 
 class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInterface
 {
@@ -30,7 +27,6 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
      * @var int
      */
     private int $chunkSize;
-
 
     private Carbon $now;
 
@@ -69,16 +65,18 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
 
     /**
      * ジョブが実行されていないことを確認
+     *
      * @throws DomainException
+     *
      * @return void
      */
     private function handle(): void
     {
         $exists = $this->dlDailyYoutubeRepository->existsByDate($this->now->format('Y-m-d'));
         if ($exists) {
-            throw new DomainException("本日のジョブは既に実行されています。");
+            throw new DomainException('本日のジョブは既に実行されています。');
         }
-        return;
+
     }
 
     /**
@@ -279,14 +277,14 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
         $chunksData = array_chunk($youtubeToArray, $this->chunkSize);
 
         foreach ($chunksData as $chunkData) {
-            switch($repository) {
-                case "dwh":
+            switch ($repository) {
+                case 'dwh':
                     $this->dwhDailyYoutubeRepository->bulkInsert($chunkData);
                     break;
-                case "daily":
+                case 'daily':
                     $this->dailyYoutubeRepository->bulkInsert($chunkData);
                     break;
-                case "week":
+                case 'week':
                     $this->weekYoutubeRepository->bulkInsert($chunkData);
                     break;
             }

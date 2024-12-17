@@ -6,6 +6,7 @@ namespace App\Repositories\WeekYoutube;
 
 use App\Models\WeekYoutubeVideo;
 use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class WeekYoutubeRepository implements WeekYoutubeRepositoryInterface
@@ -38,5 +39,16 @@ class WeekYoutubeRepository implements WeekYoutubeRepositoryInterface
             ->where('search_category_id', $categoryId)
             ->limit($limit)
             ->get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchVideosByLastWeekByCategoryIdWithPagination(int $categoryId, array $with = [], int $perPage = 20): LengthAwarePaginator
+    {
+        return WeekYoutubeVideo::with($with)
+            ->where('target_week', Carbon::today()->isoWeek)
+            ->where('search_category_id', $categoryId)
+            ->paginate($perPage);
     }
 }

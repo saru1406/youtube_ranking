@@ -54,16 +54,18 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
 
     /**
      * ジョブが実行されていないことを確認
+     *
      * @throws DomainException
+     *
      * @return void
      */
     private function handle(): void
     {
         $exists = $this->dlYoutubeRepository->existsByDateHour(Carbon::now()->format('Y-m-d H'));
         if ($exists) {
-            throw new DomainException("現時刻のジョブは既に実行されています。");
+            throw new DomainException('現時刻のジョブは既に実行されています。');
         }
-        return;
+
     }
 
     /**
@@ -80,7 +82,7 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
             do {
                 $categoryVideos = array_merge($categoryVideos, $this->fetchYoutubeData($category));
 
-                if (!$this->pageToken) {
+                if (! $this->pageToken) {
                     $this->storeYoutubeData($categoryVideos, $category);
                     $this->allVideos = array_merge($this->allVideos, $categoryVideos);
                 }

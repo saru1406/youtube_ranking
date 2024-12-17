@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('week_youtube_videos', function (Blueprint $table) {
-            $table->unsignedTinyInteger('target_week')->comment('対象日');
+            $table->unsignedTinyInteger('target_week')->comment('対象週');
             $table->unsignedBigInteger('week_view_count')->comment('1週間の再生回数');
             $table->unsignedBigInteger('ranking')->comment('ランキング');
             $table->unsignedTinyInteger('search_category_id')->comment('検索カテゴリID');
@@ -30,6 +30,8 @@ return new class extends Migration
             $table->string('duration')->comment('再生時間');
             $table->timestamp('published_at')->nullable()->comment('公開日時');
             $table->timestamps();
+
+            $table->unique(['target_week', 'search_category_id', 'video_id'], 'unique_week_youtube_video');
         });
     }
 

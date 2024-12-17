@@ -23,8 +23,7 @@ class DlYoutubeRepository implements DlYoutubeRepositoryInterface
     public function existsByDateHour(string $dateHour): bool
     {
         return DB::table('dl_youtube_videos')
-        ->where('created_at', 'like', "{$dateHour}%")
-        ->exists();
+            ->where('created_at', 'like', "{$dateHour}%")
+            ->exists();
     }
-
 }

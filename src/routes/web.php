@@ -11,7 +11,7 @@ use Inertia\Inertia;
 Route::get('/', [YoutubeRankController::class, 'dailyTrend'])->name('daily.trend');
 Route::get('/week', [YoutubeRankController::class, 'weekTrend'])->name('week.trend');
 Route::get('/trend/{categoryName}', [YoutubeRankController::class, 'dailyTrendByCategory'])->name('daily.trend.category');
-
+Route::get('/week/{categoryName}', [YoutubeRankController::class, 'weekTrendByCategory'])->name('week.trend.category');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
