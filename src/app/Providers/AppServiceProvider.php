@@ -16,6 +16,8 @@ use App\Repositories\DwhDailyYoutube\DwhDailyYoutubeRepository;
 use App\Repositories\DwhDailyYoutube\DwhDailyYoutubeRepositoryInterface;
 use App\Repositories\DwhYoutube\DwhYoutubeRepository;
 use App\Repositories\DwhYoutube\DwhYoutubeRepositoryInterface;
+use App\Repositories\MonthYoutube\MonthYoutubeRepository;
+use App\Repositories\MonthYoutube\MonthYoutubeRepositoryInterface;
 use App\Repositories\WeekYoutube\WeekYoutubeRepository;
 use App\Repositories\WeekYoutube\WeekYoutubeRepositoryInterface;
 use App\Repositories\Youtube\YoutubeRepository;
@@ -63,6 +65,9 @@ class AppServiceProvider extends ServiceProvider
 
         // WeekYoutubeRepository
         $this->app->bind(WeekYoutubeRepositoryInterface::class, WeekYoutubeRepository::class);
+
+        // MonthYoutubeRepository
+        $this->app->bind(MonthYoutubeRepositoryInterface::class, MonthYoutubeRepository::class);
 
         // YoutubeRepository
         $this->app->bind(YoutubeRepositoryInterface::class, YoutubeRepository::class);

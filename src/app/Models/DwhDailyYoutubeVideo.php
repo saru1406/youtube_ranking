@@ -14,6 +14,13 @@ class DwhDailyYoutubeVideo extends Model
     use HasFactory, HasUlids;
 
     protected $fillable = [
+        'ulid',
+        'post_year',
+        'post_week',
+        'post_week_day',
+        'target_year',
+        'target_week',
+        'target_week_day',
         'search_category_id',
         'video_id',
         'title',

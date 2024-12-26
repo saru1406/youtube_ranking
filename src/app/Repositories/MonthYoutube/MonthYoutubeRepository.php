@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Repositories\WeekYoutube;
+namespace App\Repositories\MonthYoutube;
 
 use App\Models\WeekYoutubeVideo;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
-class WeekYoutubeRepository implements WeekYoutubeRepositoryInterface
+class MonthYoutubeRepository implements MonthYoutubeRepositoryInterface
 {
     /**
      * {@inheritDoc}
@@ -37,7 +37,6 @@ class WeekYoutubeRepository implements WeekYoutubeRepositoryInterface
             // 本番用
             // ->where('target_week', Carbon::today()->isoWeek - 1)
             ->where('search_category_id', $categoryId)
-            ->orderBy('ranking', 'asc')
             ->limit($limit)
             ->get();
     }
@@ -50,7 +49,6 @@ class WeekYoutubeRepository implements WeekYoutubeRepositoryInterface
         return WeekYoutubeVideo::with($with)
             ->where('target_week', Carbon::today()->isoWeek)
             ->where('search_category_id', $categoryId)
-            ->orderBy('ranking', 'asc')
             ->paginate($perPage);
     }
 }

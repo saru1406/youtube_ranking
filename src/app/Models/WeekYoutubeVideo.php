@@ -14,7 +14,9 @@ class WeekYoutubeVideo extends Model
 
     protected $fillable = [
         'search_category_id',
+        'target_year',
         'target_week',
+        'target_week_day',
         'ranking',
         'week_view_count',
         'video_id',
