@@ -33,7 +33,7 @@ return new class extends Migration
             $table->timestamp('published_at')->nullable()->comment('公開日時');
             $table->timestamps();
 
-            $table->unique(['target_week', 'search_category_id', 'video_id'], 'unique_week_youtube_video');
+            $table->unique(['target_year', 'target_week', 'search_category_id', 'video_id'], 'unique_week_youtube_video');
         });
     }
 

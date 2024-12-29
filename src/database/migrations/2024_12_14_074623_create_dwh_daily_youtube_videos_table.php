@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('dwh_daily_youtube_videos', function (Blueprint $table) {
             $table->ulid()->comment('ulid');
             $table->year('post_year')->comment('投稿年');
+            $table->unsignedTinyInteger('post_month')->comment('投稿月');
+            $table->unsignedTinyInteger('post_day')->comment('投稿日');
             $table->unsignedTinyInteger('post_week')->comment('投稿週');
             $table->unsignedTinyInteger('post_week_day')->comment('投稿曜日');
             $table->year('target_year')->comment('対象年');
+            $table->unsignedTinyInteger('target_month')->comment('投稿月');
             $table->unsignedTinyInteger('target_week')->comment('対象週');
             $table->unsignedTinyInteger('target_week_day')->comment('対象曜日');
             $table->unsignedTinyInteger('search_category_id')->comment('検索カテゴリID');

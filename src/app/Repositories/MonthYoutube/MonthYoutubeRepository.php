@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories\MonthYoutube;
 
+use App\Models\MonthYoutubeVideo;
 use App\Models\WeekYoutubeVideo;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -16,7 +17,7 @@ class MonthYoutubeRepository implements MonthYoutubeRepositoryInterface
      */
     public function bulkInsert(array $data): void
     {
-        WeekYoutubeVideo::insert($data);
+        MonthYoutubeVideo::insert($data);
     }
 
     /**
@@ -24,15 +25,15 @@ class MonthYoutubeRepository implements MonthYoutubeRepositoryInterface
      */
     public function delete(): void
     {
-        WeekYoutubeVideo::query()->delete();
+        MonthYoutubeVideo::query()->delete();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function fetchVideosByLastWeekByCategoryId(int $categoryId, array $with = [], ?int $limit = null): Collection
+    public function fetchVideosByLastMonthByCategoryId(int $categoryId, array $with = [], ?int $limit = null): Collection
     {
-        return WeekYoutubeVideo::with($with)
+        return MonthYoutubeVideo::with($with)
             ->where('target_week', Carbon::today()->isoWeek)
             // 本番用
             // ->where('target_week', Carbon::today()->isoWeek - 1)
@@ -44,9 +45,9 @@ class MonthYoutubeRepository implements MonthYoutubeRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchVideosByLastWeekByCategoryIdWithPagination(int $categoryId, array $with = [], int $perPage = 20): LengthAwarePaginator
+    public function fetchVideosByLastMonthByCategoryIdWithPagination(int $categoryId, array $with = [], int $perPage = 20): LengthAwarePaginator
     {
-        return WeekYoutubeVideo::with($with)
+        return MonthYoutubeVideo::with($with)
             ->where('target_week', Carbon::today()->isoWeek)
             ->where('search_category_id', $categoryId)
             ->paginate($perPage);

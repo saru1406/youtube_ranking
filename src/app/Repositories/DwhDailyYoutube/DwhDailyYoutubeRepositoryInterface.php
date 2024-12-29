@@ -17,4 +17,6 @@ interface DwhDailyYoutubeRepositoryInterface
     public function fetchDwhYoutubeByDailyAggregate(): array;
 
     public function fetchDwhYoutubeByWeekAggregate(): array;
+
+    public function fetchDwhYoutubeByMonthAggregate(): array;
 }
