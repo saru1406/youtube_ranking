@@ -16,6 +16,8 @@ use App\Repositories\DwhDailyYoutube\DwhDailyYoutubeRepository;
 use App\Repositories\DwhDailyYoutube\DwhDailyYoutubeRepositoryInterface;
 use App\Repositories\DwhYoutube\DwhYoutubeRepository;
 use App\Repositories\DwhYoutube\DwhYoutubeRepositoryInterface;
+use App\Repositories\MonthYoutube\MonthYoutubeRepository;
+use App\Repositories\MonthYoutube\MonthYoutubeRepositoryInterface;
 use App\Repositories\WeekYoutube\WeekYoutubeRepository;
 use App\Repositories\WeekYoutube\WeekYoutubeRepositoryInterface;
 use App\Repositories\Youtube\YoutubeRepository;
@@ -28,6 +30,10 @@ use App\Usecase\Youtube\Daily\DailyTrendByCategoryYoutubeUsecase;
 use App\Usecase\Youtube\Daily\DailyTrendByCategoryYoutubeUsecaseInterface;
 use App\Usecase\Youtube\Daily\DailyTrendYoutubeUsecase;
 use App\Usecase\Youtube\Daily\DailyTrendYoutubeUsecaseInterface;
+use App\Usecase\Youtube\Month\MonthTrendByCategoryYoutubeUsecase;
+use App\Usecase\Youtube\Month\MonthTrendByCategoryYoutubeUsecaseInterface;
+use App\Usecase\Youtube\Month\MonthTrendYoutubeUsecase;
+use App\Usecase\Youtube\Month\MonthTrendYoutubeUsecaseInterface;
 use App\Usecase\Youtube\Week\WeekTrendByCategoryYoutubeUsecase;
 use App\Usecase\Youtube\Week\WeekTrendByCategoryYoutubeUsecaseInterface;
 use App\Usecase\Youtube\Week\WeekTrendYoutubeUsecase;
@@ -64,6 +70,9 @@ class AppServiceProvider extends ServiceProvider
         // WeekYoutubeRepository
         $this->app->bind(WeekYoutubeRepositoryInterface::class, WeekYoutubeRepository::class);
 
+        // MonthYoutubeRepository
+        $this->app->bind(MonthYoutubeRepositoryInterface::class, MonthYoutubeRepository::class);
+
         // YoutubeRepository
         $this->app->bind(YoutubeRepositoryInterface::class, YoutubeRepository::class);
 
@@ -74,6 +83,10 @@ class AppServiceProvider extends ServiceProvider
         // WeekYoutubeUsecase
         $this->app->bind(WeekTrendYoutubeUsecaseInterface::class, WeekTrendYoutubeUsecase::class);
         $this->app->bind(WeekTrendByCategoryYoutubeUsecaseInterface::class, WeekTrendByCategoryYoutubeUsecase::class);
+
+        // MonthYoutubeUsecase
+        $this->app->bind(MonthTrendYoutubeUsecaseInterface::class, MonthTrendYoutubeUsecase::class);
+        $this->app->bind(MonthTrendByCategoryYoutubeUsecaseInterface::class, MonthTrendByCategoryYoutubeUsecase::class);
 
         // CategoryRepository
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);

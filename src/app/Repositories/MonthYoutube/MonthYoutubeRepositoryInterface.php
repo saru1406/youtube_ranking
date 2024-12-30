@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Repositories\WeekYoutube;
+namespace App\Repositories\MonthYoutube;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
-interface WeekYoutubeRepositoryInterface
+interface MonthYoutubeRepositoryInterface
 {
     /**
      * WeekYoutubeにデータを一括保存
@@ -25,22 +25,22 @@ interface WeekYoutubeRepositoryInterface
     public function delete(): void;
 
     /**
-     * カテゴリ毎に週集計した動画を取得
+     * カテゴリ毎に月集計した動画を取得
      *
      * @param int $categoryId
      * @param array $with
      * @param mixed $limit
      * @return \Illuminate\Support\Collection
      */
-    public function fetchVideosByLastWeekByCategoryId(int $categoryId, array $with = [], ?int $limit = null): Collection;
+    public function fetchVideosByLastMonthByCategoryId(int $categoryId, array $with = [], ?int $limit = null): Collection;
 
     /**
-     * カテゴリ毎に週集計した動画をページネーションで取得
+     * カテゴリ毎に月集計した動画をページネーションで取得
      *
      * @param int $categoryId
      * @param array $with
      * @param int $perPage
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function fetchVideosByLastWeekByCategoryIdWithPagination(int $categoryId, array $with = [], int $perPage = 20): LengthAwarePaginator;
+    public function fetchVideosByLastMonthByCategoryIdWithPagination(int $categoryId, array $with = [], int $perPage = 20): LengthAwarePaginator;
 }

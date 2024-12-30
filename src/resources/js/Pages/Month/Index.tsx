@@ -28,10 +28,10 @@ export default function WeekIndex({
     return (
         <>
             <Head title='RankTube - YouTube再生回数・トレンドランキング' />
-            <BaseLayout path={route('week.trend')}>
+            <BaseLayout path={route('month.trend')}>
                 <div className='mt-12 mx-14'>
                     <div className='relative mb-10'>
-                        <h2 className='text-2xl'>週間ジャンル別ランキング</h2>
+                        <h2 className='text-2xl'>月間ジャンル別ランキング</h2>
                         <div className='absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-red-400 via-yellow-500 to-yellow-100'></div>
                     </div>
                     <div className='my-5 w-11/12 ml-7'>
@@ -41,7 +41,7 @@ export default function WeekIndex({
                                     <div className='flex'>
                                         <Link
                                             href={route(
-                                                'week.trend.category',
+                                                'month.trend.category',
                                                 key
                                             )}
                                             className='text-xl'
@@ -112,7 +112,10 @@ export default function WeekIndex({
                                 ))}
                                 <div className='text-right mt-5'>
                                     <Link
-                                        href={route('week.trend.category', key)}
+                                        href={route(
+                                            'month.trend.category',
+                                            key
+                                        )}
                                         className='text-blue-700'
                                     >
                                         もっとみる

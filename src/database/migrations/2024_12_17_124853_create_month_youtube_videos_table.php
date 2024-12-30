@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('week_youtube_videos', function (Blueprint $table) {
+        Schema::create('month_youtube_videos', function (Blueprint $table) {
             $table->year('target_year')->comment('対象年');
-            $table->unsignedTinyInteger('target_week')->comment('対象週');
-            $table->unsignedTinyInteger('target_week_day')->comment('対象曜日');
-            $table->unsignedBigInteger('week_view_count')->comment('1週間の再生回数');
+            $table->unsignedTinyInteger('target_month')->comment('対象月');
+            $table->unsignedBigInteger('month_view_count')->comment('1か月の再生回数');
             $table->unsignedBigInteger('ranking')->comment('ランキング');
             $table->unsignedTinyInteger('search_category_id')->comment('検索カテゴリID');
             $table->foreign('search_category_id')->references('category_number')->on('categories')->onUpdate('cascade');
@@ -33,7 +32,7 @@ return new class extends Migration
             $table->timestamp('published_at')->nullable()->comment('公開日時');
             $table->timestamps();
 
-            $table->unique(['target_year', 'target_week', 'search_category_id', 'video_id'], 'unique_week_youtube_video');
+            $table->unique(['target_year', 'target_month', 'search_category_id', 'video_id'], 'unique_month_youtube_video');
         });
     }
 
@@ -42,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('week_youtube_videos');
+        Schema::dropIfExists('month_youtube_videos');
     }
 };

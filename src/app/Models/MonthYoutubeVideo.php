@@ -4,21 +4,17 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class WeekYoutubeVideo extends Model
+class MonthYoutubeVideo extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'search_category_id',
         'target_year',
-        'target_week',
-        'target_week_day',
+        'target_month',
         'ranking',
-        'week_view_count',
+        'month_view_count',
         'video_id',
         'title',
         'description',

@@ -2,21 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Repositories\WeekYoutube;
+namespace App\Repositories\MonthYoutube;
 
-use App\Models\WeekYoutubeVideo;
-use Carbon\Carbon;
+use App\Models\MonthYoutubeVideo;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
-class WeekYoutubeRepository implements WeekYoutubeRepositoryInterface
+class MonthYoutubeRepository implements MonthYoutubeRepositoryInterface
 {
     /**
      * {@inheritDoc}
      */
     public function bulkInsert(array $data): void
     {
-        WeekYoutubeVideo::insert($data);
+        MonthYoutubeVideo::insert($data);
     }
 
     /**
@@ -24,16 +23,16 @@ class WeekYoutubeRepository implements WeekYoutubeRepositoryInterface
      */
     public function delete(): void
     {
-        WeekYoutubeVideo::query()->delete();
+        MonthYoutubeVideo::query()->delete();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function fetchVideosByLastWeekByCategoryId(int $categoryId, array $with = [], ?int $limit = null): Collection
+    public function fetchVideosByLastMonthByCategoryId(int $categoryId, array $with = [], ?int $limit = null): Collection
     {
-        return WeekYoutubeVideo::with($with)
-            ->where('target_week', Carbon::today()->isoWeek)
+        return MonthYoutubeVideo::with($with)
+            ->where('target_month', now()->month)
             // 本番用
             // ->where('target_week', Carbon::today()->isoWeek - 1)
             ->where('search_category_id', $categoryId)
@@ -45,10 +44,10 @@ class WeekYoutubeRepository implements WeekYoutubeRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchVideosByLastWeekByCategoryIdWithPagination(int $categoryId, array $with = [], int $perPage = 20): LengthAwarePaginator
+    public function fetchVideosByLastMonthByCategoryIdWithPagination(int $categoryId, array $with = [], int $perPage = 20): LengthAwarePaginator
     {
-        return WeekYoutubeVideo::with($with)
-            ->where('target_week', Carbon::today()->isoWeek)
+        return MonthYoutubeVideo::with($with)
+            ->where('target_month', now()->month)
             ->where('search_category_id', $categoryId)
             ->orderBy('ranking', 'asc')
             ->paginate($perPage);
