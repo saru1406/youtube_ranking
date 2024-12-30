@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MonthYoutubeVideo extends Model
 {
@@ -27,4 +28,14 @@ class MonthYoutubeVideo extends Model
         'duration',
         'published_at',
     ];
+
+    /**
+     * カテゴリと紐づけ
+     *
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'search_category_id', 'category_number');
+    }
 }

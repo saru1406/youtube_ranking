@@ -33,28 +33,31 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
 
     /**
      * 年
+     *
      * @var int
      */
     private int $year;
 
     /**
      * 月
+     *
      * @var int
      */
     private int $month;
 
     /**
      * 週
+     *
      * @var int
      */
     private int $week;
 
     /**
      * 曜日
+     *
      * @var int
      */
     private int $weekDay;
-
 
     public function __construct(
         private readonly YoutubeRepositoryInterface $youtubeRepository,
@@ -199,6 +202,7 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
     {
         return $dlDailyYoutubeData->map(function ($dlDailyYoutube) {
             $publishedAt = Carbon::parse($dlDailyYoutube->video_data['snippet']['publishedAt']);
+
             return [
                 'ulid' => $this->ulid,
                 'post_year' => $publishedAt->year,

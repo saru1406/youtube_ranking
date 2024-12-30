@@ -33,9 +33,9 @@ export default function Sidebar({ path }: { path: string }) {
                         週間ランキング
                     </Link>
                     <Link
-                        href='#'
+                        href={route('month.trend')}
                         className={`block p-4 pl-8 my-3 ${
-                            path === '#'
+                            path === route('month.trend')
                                 ? 'text-gray-800 bg-gradient-to-r from-gray-700 via-gray-500 to-white'
                                 : 'hover:text-gray-800 hover:bg-gradient-to-r from-gray-700 via-gray-500 to-white'
                         }`}

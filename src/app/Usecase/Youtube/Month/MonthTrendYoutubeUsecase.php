@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Usecase\Youtube\Week;
+namespace App\Usecase\Youtube\Month;
 
 use App\Enums\Category\CategoryEnum;
-use App\Repositories\WeekYoutube\WeekYoutubeRepositoryInterface;
+use App\Repositories\MonthYoutube\MonthYoutubeRepositoryInterface;
 use Illuminate\Support\Collection;
 
-class WeekTrendYoutubeUsecase implements WeekTrendYoutubeUsecaseInterface
+class MonthTrendYoutubeUsecase implements MonthTrendYoutubeUsecaseInterface
 {
-    public function __construct(private readonly WeekYoutubeRepositoryInterface $weekYoutubeRepository) {}
+    public function __construct(
+        private readonly MonthYoutubeRepositoryInterface $monthYoutubeRepository
+    ) {}
 
     /**
      * {@inheritDoc}
@@ -30,7 +32,7 @@ class WeekTrendYoutubeUsecase implements WeekTrendYoutubeUsecaseInterface
         $categoryIds = CategoryEnum::toArray();
         $allVideosData = [];
         foreach ($categoryIds as $categoryId) {
-            $videosData = $this->weekYoutubeRepository->fetchVideosByLastWeekByCategoryId(
+            $videosData = $this->monthYoutubeRepository->fetchVideosByLastMonthByCategoryId(
                 $categoryId,
                 ['category:category_number,category_physical_name'],
                 3

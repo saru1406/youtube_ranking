@@ -57,4 +57,14 @@ class Category extends Model
     {
         return $this->hasMany(WeekYoutubeVideo::class, 'search_category_id', 'category_number');
     }
+
+    /**
+     * MonthYoutubeVideoと紐づけ
+     *
+     * @return HasMany
+     */
+    public function monthYoutubeVideos(): HasMany
+    {
+        return $this->hasMany(MonthYoutubeVideo::class, 'search_category_id', 'category_number');
+    }
 }

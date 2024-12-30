@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Repositories\MonthYoutube;
 
 use App\Models\MonthYoutubeVideo;
-use App\Models\WeekYoutubeVideo;
-use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -34,10 +32,11 @@ class MonthYoutubeRepository implements MonthYoutubeRepositoryInterface
     public function fetchVideosByLastMonthByCategoryId(int $categoryId, array $with = [], ?int $limit = null): Collection
     {
         return MonthYoutubeVideo::with($with)
-            ->where('target_week', Carbon::today()->isoWeek)
+            ->where('target_month', now()->month)
             // 本番用
             // ->where('target_week', Carbon::today()->isoWeek - 1)
             ->where('search_category_id', $categoryId)
+            ->orderBy('ranking', 'asc')
             ->limit($limit)
             ->get();
     }
@@ -48,8 +47,9 @@ class MonthYoutubeRepository implements MonthYoutubeRepositoryInterface
     public function fetchVideosByLastMonthByCategoryIdWithPagination(int $categoryId, array $with = [], int $perPage = 20): LengthAwarePaginator
     {
         return MonthYoutubeVideo::with($with)
-            ->where('target_week', Carbon::today()->isoWeek)
+            ->where('target_month', now()->month)
             ->where('search_category_id', $categoryId)
+            ->orderBy('ranking', 'asc')
             ->paginate($perPage);
     }
 }
