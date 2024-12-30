@@ -112,7 +112,10 @@ export default function WeekIndex({
                                 ))}
                                 <div className='text-right mt-5'>
                                     <Link
-                                        href={route('month.trend.category', key)}
+                                        href={route(
+                                            'month.trend.category',
+                                            key
+                                        )}
                                         className='text-blue-700'
                                     >
                                         もっとみる
