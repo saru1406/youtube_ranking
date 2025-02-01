@@ -20,6 +20,7 @@ COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 RUN <<EOF
   apt-get update
   apt-get -y install --no-install-recommends \
+    cron \
     locales \
     git \
     unzip \

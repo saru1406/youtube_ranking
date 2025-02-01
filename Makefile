@@ -100,4 +100,4 @@ front-format:
 hour-job:
 	docker compose exec app sh -c "cd src && php artisan app:hour-job-run"
 aggregate-job:
-	docker compose exec app sh -c "cd src && php artisan app:aggregate-command"
+	docker compose exec app sh -c "cd src && php artisan app:aggregate-run"

@@ -24,7 +24,7 @@ class AggregateYoutubeJobCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:aggregate-command';
+    protected $signature = 'app:aggregate-run';
 
     /**
      * The console command description.

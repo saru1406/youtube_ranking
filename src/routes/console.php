@@ -5,6 +5,5 @@ declare(strict_types=1);
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+Schedule::command('app:hour-job-run')->cron('10 * * * *')->withoutOverlapping();
+Schedule::command('app:aggregate-run')->dailyAt('23:50');
