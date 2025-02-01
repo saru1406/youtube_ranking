@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories\MonthYoutube;
 
 use App\Models\MonthYoutubeVideo;
+use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -34,7 +35,7 @@ class MonthYoutubeRepository implements MonthYoutubeRepositoryInterface
         return MonthYoutubeVideo::with($with)
             ->where('target_month', now()->month)
             // 本番用
-            // ->where('target_week', Carbon::today()->isoWeek - 1)
+            // ->where('target_month', now()->month - 1)
             ->where('search_category_id', $categoryId)
             ->orderBy('ranking', 'asc')
             ->limit($limit)

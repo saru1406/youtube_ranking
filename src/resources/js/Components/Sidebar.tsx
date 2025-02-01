@@ -10,7 +10,7 @@ export default function Sidebar({ path }: { path: string }) {
                         href={route('daily.trend')}
                         className='hover:text-gray-300 block p-3 text-left text-2xl mb-10'
                     >
-                        RankTube
+                        RankingTube
                     </Link>
                     <Link
                         href={route('daily.trend')}
