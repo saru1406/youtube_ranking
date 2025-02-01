@@ -5,5 +5,5 @@ declare(strict_types=1);
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
-Schedule::command('app:hour-job-run')->cron('25 * * * *')->withoutOverlapping();
+Schedule::command('app:hour-job-run')->cron('40 * * * *')->withoutOverlapping();
 Schedule::command('app:aggregate-run')->dailyAt('23:50');
