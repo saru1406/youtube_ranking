@@ -34,6 +34,11 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
      */
     private int $chunkSize;
 
+    /**
+     * 現在時刻
+     *
+     * @var Carbon
+     */
     private Carbon $now;
 
     /**
@@ -75,7 +80,7 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
     ) {
         $this->ulid = (string) Str::ulid();
         $this->chunkSize = 1500;
-        $this->now = now();
+        $this->now = now()->addHour()->startOfHour();
         $this->year = $this->now->year;
         $this->month = $this->now->month;
         $this->week = $this->now->weekOfYear;

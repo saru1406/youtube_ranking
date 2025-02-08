@@ -1,6 +1,7 @@
 import { Category } from '@/types/category';
 export type DailyTrend = {
     id: number;
+    ranking: number;
     video_id: string;
     title: string;
     description: string;

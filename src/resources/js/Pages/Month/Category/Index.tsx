@@ -43,14 +43,14 @@ export default function TrendIndex({
                         >
                             月間ジャンル別ランキング
                         </Link>
-                        ＞ 週間
+                        ＞ 月間
                         {categoryLabels[categoryPath] || `カテゴリー ${path}`}
                         ランキング
                     </div>
                     <div className='mb-10'>
                         <div className='flex items-center'>
                             <h2 className='text-2xl'>
-                                週間
+                                月間
                                 {categoryLabels[categoryPath] ||
                                     `カテゴリー ${path}`}
                                 ランキング
@@ -63,7 +63,7 @@ export default function TrendIndex({
                         </div>
 
                         <div className='relative'>
-                            <div className='absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-red-500 via-yellow-500 to-yellow-100'></div>
+                            <div className='absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 bg-[length:100%_6px] bg-no-repeat'></div>
                         </div>
                     </div>
 
@@ -77,6 +77,11 @@ export default function TrendIndex({
                                     rel='noopener noreferrer'
                                 >
                                     <div className='relative w-[246px] h-[138px] flex-shrink-0'>
+                                        <h2 className='relative text-4xl font-bold text-white'>
+                                            <span className='absolute -left-4 top-1/2 -translate-y-1/2 px-4 py-2 text-2xl font-extrabold italic text-white rounded-full bg-gradient-to-br from-blue-500 to-purple-500 shadow-lg tracking-wide drop-shadow-lg'>
+                                                {trend.ranking}位
+                                            </span>
+                                        </h2>
                                         <img
                                             src={`https://img.youtube.com/vi/${trend.video_id}/hqdefault.jpg`}
                                             alt={trend.title}
@@ -113,8 +118,8 @@ export default function TrendIndex({
                                             </p>
                                         </div>
                                         <p className='text-xs'>
-                                            {trend.description?.length > 150
-                                                ? `${trend.description.substring(0, 150)}...`
+                                            {trend.description?.length > 130
+                                                ? `${trend.description.substring(0, 130)}...`
                                                 : trend.description || null}
                                         </p>
                                     </div>

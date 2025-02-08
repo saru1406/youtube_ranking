@@ -45,7 +45,7 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
     ) {
         $this->ulid = (string) Str::ulid();
         $this->pageToken = null;
-        $this->now = Carbon::now();
+        $this->now = Carbon::now()->addHour()->startOfHour();
     }
 
     /**
@@ -75,7 +75,6 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
         if ($exists) {
             throw new DomainException('現時刻のジョブは既に実行されています。');
         }
-
     }
 
     /**

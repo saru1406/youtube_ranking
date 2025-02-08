@@ -2,7 +2,7 @@ import { Link } from '@inertiajs/react';
 
 export default function Sidebar({ path }: { path: string }) {
     return (
-        <div className='max-w-64 min-w-64 bg-gradient-to-b from-rose-900 via-rose-500 to-rose-300 text-white sticky top-0 h-screen'>
+        <div className='max-w-64 min-w-64 bg-gradient-to-b from-red-700 via-pink-600 to-violet-600 text-white sticky top-0 h-screen'>
             {/* <div className='max-w-56 min-w-52 bg-gradient-to-b from-rose-800 via-rose-600 to-rose-100 text-white sticky top-0 h-screen'></div> */}
             <div className='flex flex-col h-full justify-end'>
                 <div>
@@ -16,8 +16,8 @@ export default function Sidebar({ path }: { path: string }) {
                         href={route('daily.trend')}
                         className={`block py-4 pl-8 my-3 ${
                             path === route('daily.trend')
-                                ? 'text-gray-800 bg-gradient-to-r from-gray-700 via-gray-500 to-white'
-                                : 'hover:text-gray-800 hover:bg-gradient-to-r from-gray-700 via-gray-500 to-white'
+                                ? 'text-white bg-gradient-to-r from-gray-700 via-gray-500 to-white'
+                                : 'hover:text-white hover:bg-gradient-to-r from-gray-700 via-gray-500 to-white'
                         }`}
                     >
                         急上昇
@@ -26,8 +26,8 @@ export default function Sidebar({ path }: { path: string }) {
                         href={route('week.trend')}
                         className={`block py-4 pl-8 my-3 ${
                             path === route('week.trend')
-                                ? 'text-black bg-gradient-to-r from-gray-700 via-gray-500 to-white'
-                                : 'hover:text-gray-800 hover:bg-gradient-to-r from-gray-700 via-gray-500 to-white'
+                                ? 'text-white bg-gradient-to-r from-gray-700 via-gray-500 to-white'
+                                : 'hover:text-white hover:bg-gradient-to-r from-gray-700 via-gray-500 to-white'
                         }`}
                     >
                         週間ランキング
@@ -36,8 +36,8 @@ export default function Sidebar({ path }: { path: string }) {
                         href={route('month.trend')}
                         className={`block p-4 pl-8 my-3 ${
                             path === route('month.trend')
-                                ? 'text-gray-800 bg-gradient-to-r from-gray-700 via-gray-500 to-white'
-                                : 'hover:text-gray-800 hover:bg-gradient-to-r from-gray-700 via-gray-500 to-white'
+                                ? 'text-white bg-gradient-to-r from-gray-700 via-gray-500 to-white'
+                                : 'hover:text-white hover:bg-gradient-to-r from-gray-700 via-gray-500 to-white'
                         }`}
                     >
                         月間ランキング
@@ -46,11 +46,11 @@ export default function Sidebar({ path }: { path: string }) {
                         href='#'
                         className={`block p-4 pl-8 my-3 ${
                             path === '#'
-                                ? 'text-gray-800 bg-gradient-to-r from-gray-700 via-gray-500 to-white'
-                                : 'hover:text-gray-800 hover:bg-gradient-to-r from-gray-700 via-gray-500 to-white'
+                                ? 'text-white bg-gradient-to-r from-gray-700 via-gray-500 to-white'
+                                : 'hover:text-white hover:bg-gradient-to-r from-gray-700 via-gray-500 to-white'
                         }`}
                     >
-                        年間ランキング
+                        Coming Soon
                     </Link>
                 </div>
                 <div className='flex-1 flex flex-col justify-end mb-5'>
