@@ -92,7 +92,7 @@ class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInte
      */
     public function execute(): void
     {
-        // $this->handle();
+        $this->handle();
 
         $this->dlDailyYoutubeData();
         Log::info('DL日別保存完了');

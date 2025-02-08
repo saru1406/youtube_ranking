@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories\DlYoutube;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 interface DlYoutubeRepositoryInterface
@@ -19,10 +20,10 @@ interface DlYoutubeRepositoryInterface
     /**
      * 日時が保存されているか存在確認
      *
-     * @param string $dateHour
+     * @param Carbon $dateHour
      * @return bool
      */
-    public function existsByDateHour(string $dateHour): bool;
+    public function existsByDateHour(Carbon $dateHour): bool;
 
     /**
      * ulidを元にDlYoutubeデータを取得

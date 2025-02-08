@@ -53,7 +53,7 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
      */
     public function execute(): void
     {
-        // $this->handle();
+        $this->handle();
 
         $this->storeDlYoutubeData();
         Log::info('DL保存完了');
@@ -71,7 +71,7 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
      */
     private function handle(): void
     {
-        $exists = $this->dlYoutubeRepository->existsByDateHour(Carbon::now()->format('Y-m-d H'));
+        $exists = $this->dlYoutubeRepository->existsByDateHour($this->now);
         if ($exists) {
             throw new DomainException('現時刻のジョブは既に実行されています。');
         }

@@ -39,16 +39,12 @@ class HourYoutubeJobCommand extends Command
     public function handle(): void
     {
         try {
-            Log::info('実行開始');
-
             DB::transaction(function () {
                 HourYoutubeJob::dispatch($this->runHourYoutubeJobUsecase);
             });
-
-            Log::info('実行完了');
         } catch (Exception $e) {
             Log::error(
-                'error:'.$e->getMessage()
+                'error:' . $e->getMessage()
             );
         }
     }
