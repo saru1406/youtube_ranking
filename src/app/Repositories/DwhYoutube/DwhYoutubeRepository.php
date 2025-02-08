@@ -27,6 +27,7 @@ class DwhYoutubeRepository implements DwhYoutubeRepositoryInterface
         return DwhYoutubeVideo::with($with)
             ->where('created_at', '>=', Carbon::now()->subHour())
             ->where('search_category_id', $categoryId)
+            ->orderBy('ranking', 'asc')
             ->limit($limit)
             ->get();
     }
@@ -39,6 +40,7 @@ class DwhYoutubeRepository implements DwhYoutubeRepositoryInterface
         return DwhYoutubeVideo::with($with)
             ->where('created_at', '>=', Carbon::now()->subHour())
             ->where('search_category_id', $categoryId)
+            ->orderBy('ranking', 'asc')
             ->paginate($perPage);
     }
 

@@ -20,6 +20,11 @@ use Str;
 
 class RunAggregateYoutubeJobUsecase implements RunAggregateYoutubeJobUsecaseInterface
 {
+    /**
+     * ULID
+     *
+     * @var string
+     */
     private string $ulid;
 
     /**

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories\DlYoutube;
 
 use App\Models\DlYoutubeVideo;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class DlYoutubeRepository implements DlYoutubeRepositoryInterface
@@ -25,5 +26,13 @@ class DlYoutubeRepository implements DlYoutubeRepositoryInterface
         return DB::table('dl_youtube_videos')
             ->where('created_at', 'like', "{$dateHour}%")
             ->exists();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fetchDlYoutubeByUlid(string $ulid): Collection
+    {
+        return DlYoutubeVideo::where('ulid', $ulid)->get();
     }
 }

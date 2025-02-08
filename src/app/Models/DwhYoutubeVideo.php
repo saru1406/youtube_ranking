@@ -13,6 +13,7 @@ class DwhYoutubeVideo extends Model
     use HasFactory;
 
     protected $fillable = [
+        'ranking',
         'search_category_id',
         'video_id',
         'title',

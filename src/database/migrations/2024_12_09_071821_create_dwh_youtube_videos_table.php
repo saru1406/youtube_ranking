@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('dwh_youtube_videos', function (Blueprint $table) {
             $table->id()->comment('ID');
+            $table->unsignedTinyInteger('ranking')->comment('ランキング');
             $table->unsignedTinyInteger('search_category_id')->comment('検索カテゴリID');
             $table->foreign('search_category_id')->references('category_number')->on('categories')->onUpdate('cascade');
             $table->string('video_id')->comment('Youtube動画ID');
@@ -29,7 +30,7 @@ return new class extends Migration
             $table->timestamp('published_at')->nullable()->comment('公開日時');
             $table->timestamps();
 
-            $table->unique(['created_at', 'search_category_id', 'video_id']);
+            $table->unique(['ranking', 'search_category_id', 'created_at']);
         });
     }
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repositories\DlYoutube;
 
+use Illuminate\Support\Collection;
+
 interface DlYoutubeRepositoryInterface
 {
     /**
@@ -21,4 +23,12 @@ interface DlYoutubeRepositoryInterface
      * @return bool
      */
     public function existsByDateHour(string $dateHour): bool;
+
+    /**
+     * ulidを元にDlYoutubeデータを取得
+     *
+     * @param string $ulid
+     * @return Collection
+     */
+    public function fetchDlYoutubeByUlid(string $ulid): Collection;
 }

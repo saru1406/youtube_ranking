@@ -11,10 +11,19 @@ use App\Repositories\Youtube\YoutubeRepositoryInterface;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use DomainException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Str;
 
 class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
 {
+    /**
+     * ULID
+     *
+     * @var string
+     */
+    private string $ulid;
+
     /**
      * ページトークン
      *
@@ -23,19 +32,20 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
     private ?string $pageToken;
 
     /**
-     * 全ビデオデータ
+     * 現在時刻
      *
-     * @var array
+     * @var Carbon
      */
-    private array $allVideos;
+    private Carbon $now;
 
     public function __construct(
         private readonly YoutubeRepositoryInterface $youtubeRepository,
         private readonly DlYoutubeRepositoryInterface $dlYoutubeRepository,
         private readonly DwhYoutubeRepositoryInterface $dwhYoutubeRepository,
     ) {
+        $this->ulid = (string) Str::ulid();
         $this->pageToken = null;
-        $this->allVideos = [];
+        $this->now = Carbon::now();
     }
 
     /**
@@ -43,7 +53,7 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
      */
     public function execute(): void
     {
-        $this->handle();
+        // $this->handle();
 
         $this->storeDlYoutubeData();
         Log::info('DL保存完了');
@@ -84,7 +94,6 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
 
                 if (! $this->pageToken) {
                     $this->storeYoutubeData($categoryVideos, $category);
-                    $this->allVideos = array_merge($this->allVideos, $categoryVideos);
                 }
             } while ($this->pageToken);
         }
@@ -117,7 +126,7 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
      * @param array $categoryVideos
      * @return void
      */
-    private function storeYoutubeData(array $categoryVideos, int $category)
+    private function storeYoutubeData(array $categoryVideos, int $category): void
     {
         $categoryVideosData = $this->formatYoutubeData($categoryVideos, $category);
         $this->dlYoutubeRepository->bulkInsert($categoryVideosData);
@@ -131,14 +140,16 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
      */
     private function formatYoutubeData(array $categoryVideos, int $category): array
     {
-        return array_map(function ($categoryVideo) use ($category) {
+        return array_map(function ($categoryVideo, $key) use ($category) {
             return [
+                'ulid' => $this->ulid,
+                'ranking' => $key + 1,
                 'search_category_id' => $category,
                 'video_data' => json_encode($categoryVideo),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => $this->now,
+                'updated_at' => $this->now,
             ];
-        }, $categoryVideos);
+        }, $categoryVideos, array_keys($categoryVideos));
     }
 
     /**
@@ -148,7 +159,8 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
      */
     private function storeDwhYoutubeData(): void
     {
-        $formatDwhYoutubeData = $this->formatDwhYoutubeData();
+        $dlYoutubeData = $this->dlYoutubeRepository->fetchDlYoutubeByUlid($this->ulid);
+        $formatDwhYoutubeData = $this->formatDwhYoutubeData($dlYoutubeData);
         $this->dwhYoutubeRepository->bulkInsert($formatDwhYoutubeData);
     }
 
@@ -157,27 +169,28 @@ class RunHourYoutubeJobUsecase implements RunHourYoutubeJobUsecaseInterface
      *
      * @return array
      */
-    private function formatDwhYoutubeData(): array
+    private function formatDwhYoutubeData(Collection $dlYoutubeData): array
     {
-        return array_map(function ($allVideo) {
+        return $dlYoutubeData->map(function ($dlYoutube) {
             return [
-                'search_category_id' => $allVideo['search_category_id'],
-                'video_id' => $allVideo['id'],
-                'title' => $allVideo['snippet']['title'],
-                'description' => $allVideo['snippet']['description'] ?? null,
-                'channel_id' => $allVideo['snippet']['channelId'],
-                'channel_name' => $allVideo['snippet']['channelTitle'],
-                'view_count' => $allVideo['statistics']['viewCount'] ?? 0,
-                'like_count' => $allVideo['statistics']['likeCount'] ?? 0,
-                'comment_count' => $allVideo['statistics']['commentCount'] ?? 0,
-                'category_id' => $allVideo['snippet']['categoryId'] ?? null,
-                'url' => "https://www.youtube.com/watch?v={$allVideo['id']}",
-                'published_at' => Carbon::parse($allVideo['snippet']['publishedAt'] ?? null)->format('Y-m-d H:i:s'),
-                'duration' => $this->isoFormat($allVideo['contentDetails']['duration']),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'ranking' => $dlYoutube['ranking'],
+                'search_category_id' => $dlYoutube['search_category_id'],
+                'video_id' => $dlYoutube['video_data']['id'],
+                'title' => $dlYoutube['video_data']['snippet']['title'],
+                'description' => $dlYoutube['video_data']['snippet']['description'] ?? null,
+                'channel_id' => $dlYoutube['video_data']['snippet']['channelId'],
+                'channel_name' => $dlYoutube['video_data']['snippet']['channelTitle'],
+                'view_count' => $dlYoutube['video_data']['statistics']['viewCount'] ?? 0,
+                'like_count' => $dlYoutube['video_data']['statistics']['likeCount'] ?? 0,
+                'comment_count' => $dlYoutube['video_data']['statistics']['commentCount'] ?? 0,
+                'category_id' => $dlYoutube['video_data']['snippet']['categoryId'] ?? null,
+                'url' => "https://www.youtube.com/watch?v={$dlYoutube['video_data']['id']}",
+                'published_at' => Carbon::parse($dlYoutube['video_data']['snippet']['publishedAt'] ?? null)->format('Y-m-d H:i:s'),
+                'duration' => $this->isoFormat($dlYoutube['video_data']['contentDetails']['duration']),
+                'created_at' => $this->now,
+                'updated_at' => $this->now,
             ];
-        }, $this->allVideos);
+        })->toArray();
     }
 
     /**
