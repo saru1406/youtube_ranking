@@ -25,8 +25,7 @@ class DwhYoutubeRepository implements DwhYoutubeRepositoryInterface
     public function fetchVideosByLastHourByCategoryId(int $categoryId, array $with = [], ?int $limit = null): Collection
     {
         return DwhYoutubeVideo::with($with)
-            ->where('created_at', '>=', Carbon::now()->subHour())
-            ->where('created_at', '<=', Carbon::now())
+            ->where('created_at', Carbon::now()->startOfHour())
             ->where('search_category_id', $categoryId)
             ->orderBy('ranking', 'asc')
             ->limit($limit)
@@ -39,8 +38,7 @@ class DwhYoutubeRepository implements DwhYoutubeRepositoryInterface
     public function fetchVideosByLastHourByCategoryIdWithPagination(int $categoryId, array $with = [], int $perPage = 20): LengthAwarePaginator
     {
         return DwhYoutubeVideo::with($with)
-            ->where('created_at', '>=', Carbon::now()->subHour())
-            ->where('created_at', '<=', Carbon::now())
+            ->where('created_at', Carbon::now()->startOfHour())
             ->where('search_category_id', $categoryId)
             ->orderBy('ranking', 'asc')
             ->paginate($perPage);

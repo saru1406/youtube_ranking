@@ -32,6 +32,7 @@ class MonthYoutubeRepository implements MonthYoutubeRepositoryInterface
     public function fetchVideosByLastMonthByCategoryId(int $categoryId, array $with = [], ?int $limit = null): Collection
     {
         return MonthYoutubeVideo::with($with)
+            ->where('target_year', now()->year)
             ->where('target_month', now()->month)
             // 本番用
             // ->where('target_month', now()->month - 1)
@@ -47,6 +48,7 @@ class MonthYoutubeRepository implements MonthYoutubeRepositoryInterface
     public function fetchVideosByLastMonthByCategoryIdWithPagination(int $categoryId, array $with = [], int $perPage = 20): LengthAwarePaginator
     {
         return MonthYoutubeVideo::with($with)
+            ->where('target_year', now()->year)
             ->where('target_month', now()->month)
             ->where('search_category_id', $categoryId)
             ->orderBy('ranking', 'asc')
